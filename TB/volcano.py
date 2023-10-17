@@ -1,20 +1,22 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
-
 from matplotlib import pyplot as plt
-
 import plotly.express as px
 import plotly.graph_objects as go
 from scipy.stats import f_oneway
-
 from adjustText import adjust_text
 
 
-
 class Volcano:
-    
     def __init__(self, test_func=None):
+        """
+        Initialize the Volcano class.
+
+        Parameters:
+        - test_func: Statistical test function (e.g., f_oneway) for significance testing.
+                     Defaults to one-way ANOVA.
+        """
         if test_func is None:
             self.test_func = f_oneway
         else:
@@ -25,7 +27,16 @@ class Volcano:
         self.significance_threshold = None
 
     def fit(self, X, y):
+        """
+        Perform a statistical test on the input data and calculate significance values.
 
+        Parameters:
+        - X: DataFrame with features.
+        - y: List of labels for grouping.
+
+        Returns:
+        - DataFrame with calculated significance values, including p-values and fold changes.
+        """
         data = pd.DataFrame(X)
         labels = list(y)
 
@@ -37,7 +48,6 @@ class Volcano:
         data["labels"] = labels
 
         grps = data.groupby("labels")
-
         grp_0, grp_1 = grps.get_group(label_0), grps.get_group(label_1)
 
         p_values = []
@@ -70,31 +80,82 @@ class Volcano:
         return self.results
 
     def get_group_labels(self, labels):
+        """
+        Get the unique group labels.
+
+        Parameters:
+        - labels: List of labels for grouping.
+
+        Returns:
+        - Tuple of unique group labels.
+        """
         group_labels = list(set(labels))
         group_labels.sort()
         assert len(group_labels) == 2
         return (group_labels[0], group_labels[1])
 
     def calculate_significance_threshold(self, base_level, n_tials):
+        """
+        Calculate the significance threshold for multiple testing correction.
+
+        Parameters:
+        - base_level: Base significance level (e.g., 0.05).
+        - n_tials: Number of multiple testing trials.
+
+        Returns:
+        - Significance threshold.
+        """
         return self.significance_base_level / n_tials
 
     def calculate_p_value(self, values_0, values_1):
+        """
+        Calculate the p-value using the specified test function.
+
+        Parameters:
+        - values_0: Values for group 0.
+        - values_1: Values for group 1.
+
+        Returns:
+        - P-value.
+        """
         return self.test_func(values_0, values_1).pvalue
 
     def calculate_fold_change(self, values_0, values_1):
+        """
+        Calculate the fold change between two groups.
+
+        Parameters:
+        - values_0: Values for group 0.
+        - values_1: Values for group 1.
+
+        Returns:
+        - Fold change.
+        """
         return np.mean(values_1) / np.mean(values_0)
 
     def plot_interactive(self, minfoldchange=1, highlight=None, height=750, width=750):
+        """
+        Create an interactive volcano plot.
+
+        Parameters:
+        - minfoldchange: Minimum fold change for significance.
+        - highlight: List of features to highlight.
+        - height: Plot height.
+        - width: Plot width.
+
+        Returns:
+        - Plotly Figure for the interactive plot.
+        """
         x = "log2(fold-change)"
-        y = "-log10(p-value)"      
-        
+        y = "-log10(p-value)"
+
         results = self.results.copy()
-        
+
         results['color'] = 'a'
-        
-        results.loc[results.Significant & (results[x]> minfoldchange), 'color' ] = 'b'
-        results.loc[results.Significant & (results[x]<-minfoldchange), 'color' ] = 'c'
-        
+
+        results.loc[results.Significant & (results[x] > minfoldchange), 'color'] = 'b'
+        results.loc[results.Significant & (results[x] < -minfoldchange), 'color'] = 'c'
+
         fig = px.scatter(
             data_frame=results,
             y=y,
@@ -104,22 +165,22 @@ class Volcano:
             width=width,
             color="color",
         )
-        
+
         fig.update_traces(
             marker=dict(size=12, line=dict(width=2, color="DarkSlateGrey")),
             selector=dict(mode="markers"),
         )
-        
+
         fig.add_hline(
             y=-np.log10(self.significance_threshold), line_width=0.5, line_dash="dash"
         )
-        
-        fig.add_vline(x= minfoldchange, line_width=0.5, line_dash="dash")
+
+        fig.add_vline(x=minfoldchange, line_width=0.5, line_dash="dash")
         fig.add_vline(x=-minfoldchange, line_width=0.5, line_dash="dash")
 
-        sig = self.results[ (self.results.Significant) 
-                            & (results[x].abs()>minfoldchange) 
-                          ]
+        sig = self.results[(self.results.Significant)
+                           & (results[x].abs() > minfoldchange)
+                           ]
 
         fig.add_trace(
             go.Scatter(
@@ -143,7 +204,7 @@ class Volcano:
                 y=np.array(
                     [results[y].max(), results[y].max()]
                 )
-                * 1.1,
+                  * 1.1,
                 mode="text",
                 text=self.group_labels,
                 name="Group",
@@ -159,7 +220,19 @@ class Volcano:
         return fig
 
     def plot(self, minfoldchange=1, nmaxannot=5, legend=False, highlight=None, **kwargs):
+        """
+        Create a static volcano plot.
 
+        Parameters:
+        - minfoldchange: Minimum fold change for significance.
+        - nmaxannot: Maximum number of features to annotate.
+        - legend: Show the legend.
+        - highlight: List of features to highlight.
+        - **kwargs: Additional keyword arguments for seaborn.scatterplot.
+
+        Returns:
+        - Matplotlib figure for the static plot.
+        """
         x = "log2(fold-change)"
         y = "-log10(p-value)"
 
@@ -185,7 +258,7 @@ class Volcano:
         halign = ["left", "right"]
 
         ax = plt.gca()
-        
+
         # Add group labels
         for i in [0, 1]:
             text = plt.text(
@@ -196,28 +269,27 @@ class Volcano:
                 horizontalalignment=halign[i],
                 transform=ax.transAxes,
                 backgroundcolor="0.3",
-                bbox=dict(facecolor="none", 
-                          edgecolor="0.3", 
+                bbox=dict(facecolor="none",
+                          edgecolor="0.3",
                           boxstyle="round, pad=0.2"),
             )
 
-            
         if highlight is None:
-          annot = results[(results.Significant) & (results[x].abs()>minfoldchange)].sort_values("p-value")
-          if nmaxannot is not None:
-            annot = annot.head(nmaxannot)
+            annot = results[(results.Significant) & (results[x].abs() > minfoldchange)].sort_values("p-value")
+            if nmaxannot is not None:
+                annot = annot.head(nmaxannot)
         else:
-          annot = results[results.Feature.isin(highlight)]
-                
+            annot = results[results.Feature.isin(highlight)]
+
         # Add metabolite labels
         texts = []
         for ndx, row in annot.iterrows():
             x_value = row[x]
             y_value = row[y]
             _text = row["Feature"]
-            
+
             if highlight is not None:
-              plt.plot(x_value, y_value, mfc='none', mew=1, mec='cyan', marker='o')
+                plt.plot(x_value, y_value, mfc='none', mew=1, mec='cyan', marker='o')
             text = plt.text(
                 x_value, y_value, _text, color="black", horizontalalignment="center"
             )
@@ -230,6 +302,17 @@ class Volcano:
 
 
 def _get_color_(sig, log_fc, minfoldchange=1):
+    """
+    Get colors for points on the volcano plot.
+
+    Parameters:
+    - sig: Significance of the point.
+    - log_fc: Log2 fold change of the point.
+    - minfoldchange: Minimum fold change for significance.
+
+    Returns:
+    - Color for the point.
+    """
     if sig:
         if log_fc >= minfoldchange:
             return "C2"
@@ -239,4 +322,3 @@ def _get_color_(sig, log_fc, minfoldchange=1):
 
 
 get_colors = np.vectorize(_get_color_)
-

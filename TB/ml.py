@@ -6,7 +6,6 @@ import seaborn as sns
 import plotly.express as px
 import shap
 
-
 from sklearn.ensemble import (
     RandomForestClassifier,
     GradientBoostingClassifier,
@@ -36,7 +35,6 @@ from sklearn.metrics import (
 )
 from sklearn.decomposition import PCA
 
-
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
 from scipy.cluster.hierarchy import linkage, dendrogram, set_link_color_palette
@@ -61,12 +59,27 @@ def hierarchical_clustering(
     scaling="standard",
     scaling_kws=None,
 ):
-    """based on heatmap function from
-    http://nbviewer.ipython.org/github/herrfz/dataanalysis/
-    blob/master/week3/svd_pca.ipynb
-    Generates a heatmap from the input matrix.
-    """
+    """Generates a heatmap with hierarchical clustering from the input matrix.
 
+    Args:
+        df (pd.DataFrame): The input matrix for which you want to create a heatmap.
+        vmin (float): Optional parameter for setting the minimum value of the heatmap color scale.
+        vmax (float): Optional parameter for setting the maximum value of the heatmap color scale.
+        show (str): Specifies how the data should be displayed. Can be "scaled" or "original".
+        figsize (tuple): A tuple specifying the size of the resulting heatmap figure.
+        top_height (float): Height of the top component in the figure.
+        left_width (float): Width of the left component in the figure.
+        xmaxticks (int): Number of ticks on the x-axis.
+        ymaxticks (int): Number of ticks on the y-axis.
+        metric (str): The metric used for hierarchical clustering, with "euclidean" as the default.
+        cmap (str): Colormap to use for the heatmap.
+        scaling (str): Type of scaling to apply to the input data.
+        scaling_kws (dict): Additional parameters for data scaling.
+
+    Returns:
+        pd.DataFrame: The clustered data frame.
+        matplotlib.figure.Figure: The heatmap figure.
+    """
     df_orig = df.copy()
     df = df.copy()
 
@@ -75,13 +88,7 @@ def hierarchical_clustering(
             scaling_kws = {}
         df = scale_dataframe(df, how=scaling, **scaling_kws)
 
-    # cm = pl.cm
-    # cmap = cm.rainbow(np.linspace(0, 0, 1))
-    # hierarchy.set_link_color_palette([mpl.colors.rgb2hex(rgb[:3]) for rgb in cmap])
-
-    # Subplot sizes
     total_width, total_height = figsize
-
     main_h = 1 - (top_height / total_height)
     main_w = 1 - (left_width / total_width)
 
@@ -158,6 +165,17 @@ def hierarchical_clustering(
 
 
 def scale_dataframe(df, how="standard", **kwargs):
+    """
+    Scales a DataFrame using the specified method.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to be scaled.
+        how (str): The scaling method to use, can be "standard" or "robust".
+        **kwargs: Additional keyword arguments for the scaler.
+
+    Returns:
+        pd.DataFrame: The scaled DataFrame.
+    """
     if how == "standard":
         scaler = StandardScaler
     elif how == "robust":
@@ -166,8 +184,17 @@ def scale_dataframe(df, how="standard", **kwargs):
     df.loc[:, :] = scaler(**kwargs).fit_transform(df)
     return df
 
-
 def plot_missing_values(df, kind="matrix"):
+    """
+    Plots missing values in a DataFrame.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to visualize.
+        kind (str): The type of plot to create, can be "matrix", "bar", or "heatmap".
+
+    Returns:
+        msno.matrix, msno.bar, or None: The missing value plot or None if "heatmap" is selected.
+    """
     if kind == "matrix":
         return msno.matrix(df)
     if kind == "bar":
@@ -178,9 +205,19 @@ def plot_missing_values(df, kind="matrix"):
 
 def knn_score(df, var_names, tgt_name, **params):
     """
-    Calculate the knn accuracy of a clustered dataset with known labels.
-    """
+    Calculate the k-Nearest Neighbors (KNN) accuracy of a clustered dataset with known labels.
 
+    Args:
+        df (pd.DataFrame): The DataFrame containing the dataset.
+        var_names (list): The list of feature variable names to use for KNN.
+        tgt_name (str): The name of the target variable (known labels).
+        **params: Additional keyword arguments for the KNeighborsClassifier.
+
+    Returns:
+        float: The accuracy score of the KNN model.
+        pd.DataFrame: The confusion matrix.
+        pd.DataFrame: The predictions made by the KNN model.
+    """
     df = df.copy().reset_index(drop=True)
 
     X = df[var_names]
@@ -208,11 +245,27 @@ def knn_score(df, var_names, tgt_name, **params):
 
     return accuracy, df_coma, prediction
 
-
 def sklearn_cv_classification(
     X, y, base_model, params={}, X_test=None, n_folds=5, seeds=None
 ):
+    """
+    Perform cross-validation for a classification model using scikit-learn.
 
+    Args:
+        X (pd.DataFrame): The feature matrix.
+        y (pd.Series): The target labels.
+        base_model (class): The scikit-learn model class to use.
+        params (dict): Additional keyword arguments for the model.
+        X_test (pd.DataFrame): Test data for predictions (optional).
+        n_folds (int): The number of cross-validation folds.
+        seeds (list): List of random seeds for reproducibility.
+
+    Returns:
+        float: Mean accuracy of cross-validation.
+        float: Standard deviation of accuracy scores.
+        pd.DataFrame: Predictions from cross-validation.
+        pd.DataFrame: Predictions on the test data (if provided).
+    """
     if seeds is None:
         seeds = [1]
 
@@ -281,9 +334,26 @@ def sklearn_cv_binary_clf_roc(
     framework=None,
 ):
     """
-    sklearn model compatible binary classification procedure with
-    probability estimatoin and ROC metric with cross-validation
-    and multiple random seeds.
+    Perform cross-validation for a binary classification model using scikit-learn.
+
+    Args:
+        X (pd.DataFrame): The feature matrix.
+        y (pd.Series): The binary target labels (0 or 1).
+        base_model (class): The scikit-learn binary classification model class.
+        params (dict): Additional keyword arguments for the model.
+        X_test (pd.DataFrame): Test data for predictions (optional).
+        n_folds (int): The number of cross-validation folds.
+        seeds (list): List of random seeds for reproducibility.
+        to_numpy (bool): Convert data to NumPy arrays if True.
+        metric (callable): The scoring metric function, e.g., roc_auc_score.
+        fit_kws (dict): Additional keyword arguments for the model's fit method.
+        framework (str): Specify the framework for specific model adjustments, e.g., "lgbm".
+
+    Returns:
+        float: Mean ROC AUC of cross-validation.
+        float: Standard deviation of ROC AUC scores.
+        pd.DataFrame: Predictions from cross-validation.
+        pd.DataFrame: Predictions on the test data (if provided).
     """
     if seeds is None:
         seeds = [1]
@@ -352,6 +422,27 @@ def tabnet_cv_classification(
     fit_kws=None,
     metric=None,
 ):
+    """
+    Perform cross-validation for a binary classification model using TabNet.
+
+    Args:
+        X (pd.DataFrame): The feature matrix.
+        y (pd.Series): The binary target labels (0 or 1).
+        base_model (class): The TabNet binary classification model class.
+        params (dict): Additional keyword arguments for the model.
+        X_test (pd.DataFrame): Test data for predictions (optional).
+        n_folds (int): The number of cross-validation folds.
+        seeds (list): List of random seeds for reproducibility.
+        to_numpy (bool): Convert data to NumPy arrays if True.
+        fit_kws (dict): Additional keyword arguments for the model's fit method.
+        metric (callable): The scoring metric function, e.g., roc_auc_score.
+
+    Returns:
+        float: Mean ROC AUC of cross-validation.
+        float: Standard deviation of ROC AUC scores.
+        pd.DataFrame: Predictions from cross-validation.
+        pd.DataFrame: Predictions on the test data (if provided).
+    """
     if seeds is None:
         seeds = [1]
     if fit_kws is None:
@@ -416,6 +507,15 @@ def softmax(a, axis=None):
     Computes exp(a)/sumexp(a); relies on scipy logsumexp implementation.
     :param a: ndarray/tensor
     :param axis: axis to sum over; default (None) sums over everything
+
+    Compute the softmax function for an array, which is often used in multiclass classification.
+
+    Args:
+        a: ndarray/tensor - The input array or tensor.
+        axis: int - Axis to sum over; default (None) sums over everything.
+
+    Returns:
+        ndarray/tensor: The softmax values.
     """
     from scipy.special import logsumexp
 
@@ -426,13 +526,34 @@ def softmax(a, axis=None):
 
 
 def decode_prediction(df, encoder):
+    """
+    Decode a one-hot encoded prediction using a given encoder.
+
+    Args:
+        df: pd.DataFrame - The one-hot encoded predictions.
+        encoder: sklearn.preprocessing.LabelEncoder - The encoder to use for decoding.
+
+    Returns:
+        pd.DataFrame: The decoded predictions.
+    """
     return df.apply(encoder.inverse_transform)
 
 
 def remove_features_with_anti_target(
     df, features, anti_target="is_test", target_auc=0.6
 ):
+    """
+    Remove features based on anti-target performance and a target AUC threshold.
 
+    Args:
+        df: pd.DataFrame - The feature matrix.
+        features: list - The list of features to consider.
+        anti_target: str - The name of the anti-target variable.
+        target_auc: float - The target AUC threshold.
+
+    Returns:
+        pd.DataFrame: History of feature selection.
+        """
     features = copy(features)
 
     auc = 1
@@ -482,6 +603,22 @@ def remove_features_with_anti_target(
 
 
 def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactive=False, **plot_kws):
+    """
+    Quickly perform Principal Component Analysis (PCA) and optionally create a pairplot or scatter matrix.
+
+    Args:
+        df: pd.DataFrame - The input data for PCA.
+        n_components: int - The number of components to keep.
+        labels: pd.Series - Labels for coloring the plot (optional).
+        plot: bool - If True, create a plot (pairplot or scatter matrix).
+        scale: bool - If True, scale the data using StandardScaler.
+        interactive: bool - If True, create an interactive scatter matrix using Plotly (requires Plotly installation).
+        **plot_kws: Additional keyword arguments for the plot function.
+
+    Returns:
+        pd.DataFrame: The transformed data with PC columns.
+        sns.PairGrid or plotly.graph_objs._figure.Figure: The plot object.
+    """
     g = None
     df = df.copy()
     if scale:
@@ -505,7 +642,15 @@ def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactiv
 
 
 def pycaret_score_threshold_analysis(pycaret_prediction):
+    """
+    Analyze the effect of different score thresholds on Balanced Accuracy and sample fractions.
 
+    Args:
+        pycaret_prediction: pd.DataFrame - The prediction DataFrame from PyCaret.
+
+    Returns:
+        None
+    """
     score_thresholds = np.arange(0.5, 0.95, 0.01)
     accs = []
     ns = []
@@ -535,20 +680,28 @@ def pycaret_score_threshold_analysis(pycaret_prediction):
 
 class ShapAnalysis:
     def __init__(self, model, df):
+        """
+        Initialize the ShapAnalysis class to perform SHAP value analysis on a given model and dataset.
+
+        Args:
+            model: object - The machine learning model for SHAP analysis.
+            df: pd.DataFrame - The dataset for which SHAP values will be calculated.
+        """
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(df)
         self.df = df
         self.shap_values = shap_values
         self.instance_names = df.index.to_list()
         self.feature_names = df.columns.to_list()
-        #
-        # self.df_shap = pd.DataFrame(
-        #    shap_values.values,
-        #    columns=df.columns,
-        #    index=df.index
-        # )
 
     def waterfall(self, i, **kwargs):
+        """
+        Create a waterfall plot for a specific instance to explain its prediction.
+
+        Args:
+            i: int - Index of the instance to explain.
+            **kwargs: Additional keyword arguments for the waterfall plot.
+        """
         shap_values = self.shap_values
         self._base_values = shap_values[i][0].base_values
         self._values = shap_values[i].values
@@ -556,15 +709,27 @@ class ShapAnalysis:
             base_values=self._base_values,
             values=self._values,
             feature_names=self.feature_names,
-            # instance_names = self._instance_names,
             data=shap_values[i].data,
         )
         shap.plots.waterfall(shap_object, **kwargs)
 
     def summary(self, df=None, **kwargs):
+        """
+        Create a summary plot of SHAP values.
+
+        Args:
+            df: pd.DataFrame - The dataset for which the summary plot will be created (optional).
+            **kwargs: Additional keyword arguments for the summary plot.
+        """
         shap.summary_plot(self.shap_values, df if df is not None else self.df, **kwargs)
 
     def bar(self, **kwargs):
+        """
+        Create a bar plot to display feature importances based on SHAP values.
+
+        Args:
+            **kwargs: Additional keyword arguments for the bar plot.
+        """
         shap.plots.bar(self.shap_values, **kwargs)
         for ax in plt.gcf().axes:
             for ch in ax.get_children():
@@ -572,9 +737,3 @@ class ShapAnalysis:
                     ch.set_color("0.3")
                 except:
                     break
-
-                    
-                    
-                    
-class DurginScaler():
-    

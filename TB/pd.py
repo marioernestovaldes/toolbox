@@ -1,6 +1,9 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler, RobustScaler
-
+import pandas as pd
+import copy
+import matplotlib.pyplot as plt
+import logging
 
 def scale_dataframe(df, scaler="standard", **kwargs):
     """
@@ -20,8 +23,19 @@ def scale_dataframe(df, scaler="standard", **kwargs):
     df.loc[:, :] = scaler.fit_transform(df)
     return df
 
-
 def col_to_class(df, col_name, possible_values=None, delete_col=True):
+    """
+    Convert a categorical column into binary class columns.
+
+    Parameters:
+    - df: DataFrame
+    - col_name: Name of the column to be converted.
+    - possible_values: List of possible values for the column, if None, it's extracted from the column.
+    - delete_col: If True, delete the original column.
+
+    Returns:
+    - DataFrame with binary class columns.
+    """
     print("Converting %s to classes" % col_name)
     tmp = df.loc[:, []].copy()
     if possible_values is None:
@@ -34,8 +48,10 @@ def col_to_class(df, col_name, possible_values=None, delete_col=True):
         df.drop(col_name, 1, inplace=True)
     return df.join(tmp)
 
-
 def reduce_mem_usage(df, verbose=True):
+    """
+    Reduces the memory usage of a DataFrame by down-casting numeric data types.
+    """
     numerics = ["int16", "int32", "int64", "float16", "float32", "float64"]
     start_mem = df.memory_usage().sum() / 1024 ** 2
     for col in df.columns:
@@ -74,20 +90,26 @@ def reduce_mem_usage(df, verbose=True):
         )
     return df
 
-
-def get_dublicate_col_values(df, col_name):
+def get_duplicate_col_values(df, col_name):
+    """
+    Get duplicate rows in a DataFrame based on a specified column.
+    """
     val_counts = df[col_name].value_counts()
     values = val_counts[val_counts > 1].index
-    dublicates = df[df[col_name].isin(values)].sort_values(col_name)
-    return dublicates
-
+    duplicates = df[df[col_name].isin(values)].sort_values(col_name)
+    return duplicates
 
 def sort_df_by_row_count(df, axis=1, ascending=True):
+    """
+    Sort a DataFrame's columns by the sum of their values in ascending or descending order.
+    """
     ndx = df.sum(axis=axis).sort_values(ascending=ascending).index
-    return df.reindex(ndx, axis=(axis + 1) % 2)
-
+    return df[ndx]
 
 def stratify_df(df, columns, n_sample=None, random_state=None):
+    """
+    Stratify a DataFrame based on specified columns to ensure a balanced dataset.
+    """
     count_per_group = df.groupby(columns).count().iloc[:, 0]
     if n_sample is None:
         n_sample = count_per_group.min().min()
@@ -97,8 +119,10 @@ def stratify_df(df, columns, n_sample=None, random_state=None):
     )
     return stratified
 
-
 def val_count_df(df, column_name, sort_by_column_name=False):
+    """
+    Generate a DataFrame that contains value counts and percentages for a specified column in the original DataFrame.
+    """
     value_count = (
         df[column_name]
         .value_counts()
@@ -112,17 +136,20 @@ def val_count_df(df, column_name, sort_by_column_name=False):
         value_count = value_count.sort_values(column_name)
     return value_count
 
-
 def plot_and_display_valuecounts(df, column_name, sort_by_column_name):
+    """
+    Display a pie chart of value counts for a specified column in the DataFrame.
+    """
     val_count = val_count_df(df, column_name, sort_by_column_name)
     display(val_count)
-
     val_count.set_index(column_name).plot.pie(
         y="Value Count", figsize=(5, 5), legend=False, ylabel=""
     )
 
-
 def plot_and_display_compare_valuecounts(df1, df2, column_name, sort_by_column_name):
+    """
+    Compare and display value counts for a specified column between two DataFrames, showing the value counts as pie charts.
+    """
     val_count_1 = val_count_df(df1, column_name, sort_by_column_name)
     val_count_1 = val_count_1.rename(
         columns={"Value Count": "train_value_count", "Percentage": "train_percentage"}

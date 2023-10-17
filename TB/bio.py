@@ -1,18 +1,14 @@
 from Bio import SeqIO
 from Bio.Seq import Seq
-
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Applications import MuscleCommandline
 from Bio import AlignIO
-
 from Bio import SeqIO
-
 import tempfile
 from uuid import uuid1 as uuid
 import os
 import pandas as pd
 import numpy as np
-
 
 def multiple_sequence_alignment(
     records,
@@ -21,10 +17,22 @@ def multiple_sequence_alignment(
     id_prefix="",
     index=None,
 ):
-    """Then go to https://www.ncbi.nlm.nih.gov/projects/msaviewer/
-    https://soerendip.com/dl/alignment.fasta
     """
+    Perform multiple sequence alignment using MUSCLE and save the alignment in the specified format.
 
+    Args:
+    - records: List of sequences to be aligned. Can be either Bio.SeqRecord objects or plain sequences as strings.
+    - output_fn: Path to save the alignment file. Defaults to '/var/www/html/dl/alignment.fasta'.
+    - format: Format for saving the alignment (e.g., 'clustal'). Defaults to 'clustal'.
+    - id_prefix: Prefix for sequence IDs in the output alignment.
+    - index: List of IDs if the input is plain sequences. If None, IDs will be generated automatically.
+
+    Returns:
+    - Pandas DataFrame with aligned sequences.
+
+    The function performs multiple sequence alignment using MUSCLE and returns the result as a Pandas DataFrame.
+    You can access the alignment file using the provided link or download it from the URL.
+    """
     if isinstance(records[0], str):
         if index is None:
             records = [
@@ -53,8 +61,6 @@ def multiple_sequence_alignment(
     with open(output_fn, "r") as file:
         align = AlignIO.read(file, "fasta")
 
-    # print(align.format(format))
-
     lines = align.format("stockholm").split("\n")
 
     result = []
@@ -70,8 +76,19 @@ def multiple_sequence_alignment(
 
     return pd.DataFrame(np.array(result), index=index).sort_index()
 
-
 def fasta_to_df(fns):
+    """
+    Convert a list of FASTA files to a Pandas DataFrame.
+
+    Args:
+    - fns: List of FASTA file paths or a single file path.
+
+    Returns:
+    - Pandas DataFrame with sequence information, including labels, descriptions, sequences, and IDs.
+
+    This function reads sequences from FASTA files and creates a Pandas DataFrame with relevant information.
+    It's especially useful for handling sequence data from multiple files and organizing it into a DataFrame.
+    """
     if isinstance(fns, str):
         fns = [fns]
     sample = []

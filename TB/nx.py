@@ -3,10 +3,22 @@ import networkx as nx
 
 
 def plotly_networkx_graph(G, pos=None, title=None, node_colors=None):
+    """
+    Create a Plotly visualization of a NetworkX graph.
 
+    Args:
+        G: networkx.Graph - The NetworkX graph to visualize.
+        pos: dict, optional - A dictionary specifying node positions (default is None).
+        title: str, optional - The title of the graph (default is None).
+        node_colors: str, optional - The attribute of nodes used for coloring (default is None).
+
+    Returns:
+        None: Displays the Plotly figure.
+    """
     if pos is None:
         pos = nx.kamada_kawai_layout(G)
 
+    # Extract edge coordinates for plotting.
     edge_x = []
     edge_y = []
     for edge in G.edges():
@@ -27,6 +39,7 @@ def plotly_networkx_graph(G, pos=None, title=None, node_colors=None):
         mode="lines",
     )
 
+    # Extract node coordinates and colors for plotting.
     node_x = []
     node_y = []
     node_c = list(nx.get_node_attributes(G, node_colors).values())
@@ -44,10 +57,6 @@ def plotly_networkx_graph(G, pos=None, title=None, node_colors=None):
         hoverinfo="text",
         marker=dict(
             showscale=True,
-            # colorscale options
-            #'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
-            #'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
-            #'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |
             colorscale="YlGnBu",
             reversescale=True,
             color=node_c,
