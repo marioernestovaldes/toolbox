@@ -24,6 +24,8 @@ from glob import glob
 from pathlib import Path as P
 from tqdm.notebook import tqdm
 
+from .general import time_format
+
 # Importing more numerical and visualization modules
 from pylab import *
 from numpy import *
@@ -46,17 +48,20 @@ from .plotting import (
 
 # Configure Matplotlib settings for figures
 plt.rcParams["figure.facecolor"] = "w"
-plt.rcParams["figure.dpi"] = 300
+# plt.rcParams["figure.dpi"] = 100
 
 # Configure Pandas options for displaying dataframes
 pd.options.display.max_colwidth = 100
 pd.options.display.max_columns = 100
 
 # Set Seaborn plotting context and style
-sns.set_context("paper")
+# sns.set_context("paper")
 
-from .color_and_style import set_sns_style
+from .color_and_style import set_sns_style, lighten_color
 set_sns_style(style='ticks')
+
+# Import custom functions for LSARP data
+from .lsarp import get_plate
 
 # Define a function to get the current date in a specific format
 def today():
