@@ -46,7 +46,7 @@ from .plotting import (
 
 # Configure Matplotlib settings for figures
 plt.rcParams["figure.facecolor"] = "w"
-plt.rcParams["figure.dpi"] = 150
+plt.rcParams["figure.dpi"] = 300
 
 # Configure Pandas options for displaying dataframes
 pd.options.display.max_colwidth = 100
@@ -54,7 +54,9 @@ pd.options.display.max_columns = 100
 
 # Set Seaborn plotting context and style
 sns.set_context("paper")
-sns.set_style("white")
+
+from .color_and_style import set_sns_style
+set_sns_style(style='ticks')
 
 # Define a function to get the current date in a specific format
 def today():
@@ -76,8 +78,14 @@ def log10p1(x):
 # Define a function to remove digits from a string
 remove_digits = lambda x: "".join([i for i in x if not i.isdigit()])
 
-# Print information about the current working directory and date
+# STOP
+
 with open(__file__, "r") as this_file:
+    """
+    Read the content of the current Python script (the module it's placed in) and prints the lines until it 
+    encounters a line that contains the string "STOP". It also prints the current working directory and the 
+    current date.
+    """
     for line in this_file.readlines():
         if re.search("STOP", line):
             break
