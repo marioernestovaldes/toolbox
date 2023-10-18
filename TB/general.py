@@ -23,6 +23,41 @@ def timer(name):
     t1 = perf_counter()
     print("[{}] done in {:.3f} s".format(name, t1 - t0))
 
+
+def time_format(seconds: int) -> str:
+    """
+    Format a duration in seconds into a human-readable string representation.
+
+    Args:
+        seconds (int): The duration in seconds.
+
+    Returns:
+        str: A formatted string representing the duration in days, hours, minutes, and seconds.
+    """
+    if seconds is not None:
+        # Convert seconds to an integer to ensure it's a whole number.
+        seconds = int(seconds)
+
+        # Calculate the number of days, hours, minutes, and remaining seconds.
+        d = seconds // (3600 * 24)  # Calculate days
+        h = seconds // 3600 % 24  # Calculate hours
+        m = seconds % 3600 // 60  # Calculate minutes
+        s = seconds % 3600 % 60  # Calculate remaining seconds
+
+        # Check if there are days, hours, minutes, or seconds and format accordingly.
+        if d > 0:
+            return '{:02d}D {:02d}H {:02d}m {:02d}s'.format(d, h, m, s)
+        elif h > 0:
+            return '{:02d}H {:02d}m {:02d}s'.format(h, m, s)
+        elif m > 0:
+            return '{:02d}m {:02d}s'.format(m, s)
+        elif s > 0:
+            return '{:02d}s'.format(s)
+
+    # Return a '-' if the input is None or if the time is 0 seconds.
+    return '-'
+
+
 def intersects(group_a, group_b):
     """
     Find the intersection and unique elements between two lists or arrays.

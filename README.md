@@ -1,4 +1,4 @@
-# My useful python tools.
+# Useful python tools
 
 
 ### Plotly in Juypterlab
