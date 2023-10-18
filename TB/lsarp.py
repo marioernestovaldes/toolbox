@@ -24,3 +24,68 @@ def get_plate(x, organism):
     else:
         # If the organism is not recognized, return None or raise an exception, depending on your requirements.
         return None  # Modify this part based on your specific use case
+
+def get_org_info(organism):
+    """
+    Retrieve information about specific organisms.
+
+    This function returns information about various microbial organisms such as their
+    short name, long name, and a color code. It simplifies the process of obtaining
+    essential information for data labeling, color-coding, and visualization.
+
+    Args:
+        organism (str): A short identifier for the organism of interest.
+
+    Returns:
+        dict: A dictionary containing information about the organism, including:
+            - 'ORG_SHORT_NAME': Short abbreviation or identifier for the organism.
+            - 'ORG_LONG_NAME': Full descriptive name of the organism.
+            - 'ORG_COLOR': Hexadecimal color code representing the organism's color.
+    """
+
+    # Dictionary containing information about different organisms
+    ORGS = {
+        'EC': {
+            'ORG_SHORT_NAME': 'EC',
+            'ORG_LONG_NAME': 'Escherichia coli',
+            'ORG_COLOR': '#7391f5'
+        },
+        'FAES': {
+            'ORG_SHORT_NAME': 'FAES',
+            'ORG_LONG_NAME': 'Enterococcus faecalis',
+            'ORG_COLOR': '#fc7e97'
+        },
+        'FAEM': {
+            'ORG_SHORT_NAME': 'FAEM',
+            'ORG_LONG_NAME': 'Enterococcus faecium',
+            'ORG_COLOR': '#0cb2f0'
+        },
+        'GAS': {
+            'ORG_SHORT_NAME': 'GAS',
+            'ORG_LONG_NAME': 'Group A Streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
+        'KO': {
+            'ORG_SHORT_NAME': 'KO',
+            'ORG_LONG_NAME': 'Klebsiella oxytoca',
+            'ORG_COLOR': '#c24a4a'
+        },
+        'KP': {
+            'ORG_SHORT_NAME': 'KP',
+            'ORG_LONG_NAME': 'Klebsiella pneumoniae',
+            'ORG_COLOR': '#44BB99'
+        },
+        'PA': {
+            'ORG_SHORT_NAME': 'PA',
+            'ORG_LONG_NAME': 'Pseudomonas aeruginosa',
+            'ORG_COLOR': '#fc7e97'
+        },
+        'SA': {
+            'ORG_SHORT_NAME': 'SA',
+            'ORG_LONG_NAME': 'Staphylococcus aureus',
+            'ORG_COLOR': '#EE8866'
+        }
+    }
+
+    # Retrieve and return information about the specified organism
+    return ORGS[organism]
