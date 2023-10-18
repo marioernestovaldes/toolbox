@@ -25,6 +25,7 @@ def get_plate(x, organism):
         # If the organism is not recognized, return None or raise an exception, depending on your requirements.
         return None  # Modify this part based on your specific use case
 
+
 def get_org_info(organism):
     """
     Retrieve information about specific organisms.
@@ -48,41 +49,57 @@ def get_org_info(organism):
         'EC': {
             'ORG_SHORT_NAME': 'EC',
             'ORG_LONG_NAME': 'Escherichia coli',
+            'QC_A_STRAIN': 'ATCC_25922',
+            'QC_D_STRAIN': 'ATCC_BAA196',
             'ORG_COLOR': '#7391f5'
         },
         'FAES': {
             'ORG_SHORT_NAME': 'FAES',
             'ORG_LONG_NAME': 'Enterococcus faecalis',
+            'QC_A_STRAIN': 'ATCC_29212',
+            'QC_D_STRAIN': 'ATCC_51299',
             'ORG_COLOR': '#fc7e97'
         },
         'FAEM': {
             'ORG_SHORT_NAME': 'FAEM',
             'ORG_LONG_NAME': 'Enterococcus faecium',
+            'QC_A_STRAIN': 'ATCC_35667',
+            'QC_D_STRAIN': 'ATCC_700221',
             'ORG_COLOR': '#0cb2f0'
         },
         'GAS': {
             'ORG_SHORT_NAME': 'GAS',
             'ORG_LONG_NAME': 'Group A Streptococcus',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
             'ORG_COLOR': '#EE8866'
         },
         'KO': {
             'ORG_SHORT_NAME': 'KO',
             'ORG_LONG_NAME': 'Klebsiella oxytoca',
+            'QC_A_STRAIN': 'ATCC_700324',
+            'QC_D_STRAIN': 'ATCC_51983',
             'ORG_COLOR': '#c24a4a'
         },
         'KP': {
             'ORG_SHORT_NAME': 'KP',
             'ORG_LONG_NAME': 'Klebsiella pneumoniae',
+            'QC_A_STRAIN': 'ATCC_700603',
+            'QC_D_STRAIN': 'ATCC_BAA1705',
             'ORG_COLOR': '#44BB99'
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
             'ORG_LONG_NAME': 'Pseudomonas aeruginosa',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
             'ORG_COLOR': '#fc7e97'
         },
         'SA': {
             'ORG_SHORT_NAME': 'SA',
             'ORG_LONG_NAME': 'Staphylococcus aureus',
+            'QC_A_STRAIN': 'ATCC_25923',
+            'QC_D_STRAIN': 'ATCC_43300',
             'ORG_COLOR': '#EE8866'
         }
     }
