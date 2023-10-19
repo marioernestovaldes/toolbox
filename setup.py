@@ -34,6 +34,7 @@ def package_tree(pkgroot):
 
 
 REQUIRES = [
+    "distinctipy",
     "tqdm",
     "seaborn",
     "missingno",
@@ -42,7 +43,7 @@ REQUIRES = [
     "ipywidgets",
     "scikit-learn",
     "optuna",
-#    "matplotlib_venn",
+    "matplotlib-venn",
     "openpyxl",
     "tabulate",
     "plotly",
