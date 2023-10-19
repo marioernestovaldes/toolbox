@@ -1,5 +1,8 @@
 import seaborn as sns
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+import distinctipy
 
 
 def lighten_color(color, lightness_factor):
@@ -77,3 +80,51 @@ def set_sns_style(style='ticks'):
 
     # Set the Seaborn theme to 'ticks' with the custom style parameters
     sns.set_theme(style=style, rc=science)
+
+def get_color_palette(data: list, data_type='qualitative'):
+    """
+    Get a color palette based on the data type.
+
+    Parameters:
+    - data (list): The data for which the color palette is generated.
+    - data_type (str): The type of color palette to generate ('qualitative', 'sequential', or 'divergent').
+
+    Returns:
+    - sns.color_palette or ListedColormap: A color palette suitable for the given data type.
+
+    Usage:
+    - Qualitative palettes are best for distinguishing categorical data.
+    - Sequential palettes are suitable for ordered data.
+    - Divergent palettes are appropriate for data with two contrasting extremes.
+
+    Examples:
+    - get_color_palette(['A', 'B', 'C']) returns a qualitative palette for categorical data.
+    - get_color_palette(range(5), 'sequential') returns a sequential palette for ordered data.
+    - get_color_palette([-2, -1, 0, 1, 2], 'divergent') returns a divergent palette.
+    """
+    if data_type == 'qualitative':
+        if len(set(data)) <= 7:
+            # Return a predefined qualitative color palette with up to 7 colors.
+            return sns.color_palette(['#EE7733', '#0077BB', '#33BBEE', '#EE3377', '#CC3311',
+                                      '#009988', '#BBBBBB'])
+        elif len(set(data)) <= 10:
+            # Return a second qualitative color palette with up to 10 colors.
+            return sns.color_palette(['#77AADD', '#EE8866', '#EEDD88', '#FFAABB', '#99DDFF',
+                                      '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6'])
+        else:
+            # Generate N visually distinct colors using the distinctipy library.
+            colors = distinctipy.get_colors(len(set(data)), pastel_factor=0.7)
+            return sns.color_palette(colors)
+
+    elif data_type == 'sequential':
+        # Return a sequential color palette from the seaborn library.
+        return sns.color_palette("Blues", as_cmap=True)
+
+    elif data_type == 'divergent':
+        # Return a predefined divergent color palette.
+        return ListedColormap(['#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7',
+                               '#FDDBC7', '#F4A582', '#D6604D', '#B2182B'])
+
+
+
+
