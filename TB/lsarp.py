@@ -51,6 +51,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Escherichia coli',
             'QC_A_STRAIN': 'ATCC_25922',
             'QC_D_STRAIN': 'ATCC_BAA196',
+            'pipeline_slug': 'escherichia-coli',
             'ORG_COLOR': '#7391f5'
         },
         'FAES': {
@@ -58,6 +59,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Enterococcus faecalis',
             'QC_A_STRAIN': 'ATCC_29212',
             'QC_D_STRAIN': 'ATCC_51299',
+            'pipeline_slug': 'enterococcus-faecalis',
             'ORG_COLOR': '#fc7e97'
         },
         'FAEM': {
@@ -65,6 +67,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Enterococcus faecium',
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
+            'pipeline_slug': 'enterococcus-faecium',
             'ORG_COLOR': '#0cb2f0'
         },
         'GAS': {
@@ -72,6 +75,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Group A Streptococcus',
             'QC_A_STRAIN': '',
             'QC_D_STRAIN': '',
+            'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#EE8866'
         },
         'KO': {
@@ -79,6 +83,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Klebsiella oxytoca',
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
+            'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#c24a4a'
         },
         'KP': {
@@ -86,6 +91,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Klebsiella pneumoniae',
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
+            'pipeline_slug': 'klebsiella-pneumoniae',
             'ORG_COLOR': '#44BB99'
         },
         'PA': {
@@ -93,6 +99,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Pseudomonas aeruginosa',
             'QC_A_STRAIN': '',
             'QC_D_STRAIN': '',
+            'pipeline_slug': 'pseudomonas-aeruginosa',
             'ORG_COLOR': '#fc7e97'
         },
         'SA': {
@@ -100,6 +107,7 @@ def get_org_info(organism):
             'ORG_LONG_NAME': 'Staphylococcus aureus',
             'QC_A_STRAIN': 'ATCC_25923',
             'QC_D_STRAIN': 'ATCC_43300',
+            'pipeline_slug': 'staphylococcus-aureus',
             'ORG_COLOR': '#EE8866'
         }
     }
