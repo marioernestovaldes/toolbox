@@ -34,6 +34,7 @@ from sklearn.metrics import (
     mean_squared_error,
 )
 from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
@@ -639,6 +640,39 @@ def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactiv
             ndx_names = list(proj.index.names)
             fig = px.scatter_matrix(proj.reset_index(), color="label" if labels is not None else None, dimensions=pc_cols, hover_data=ndx_names, **plot_kws)
     return proj, fig
+
+def quick_tsne(df, perplexity=30, plot=True, **kwargs):
+    """
+    Perform t-SNE dimensionality reduction on a DataFrame and optionally create a scatterplot.
+
+    Parameters:
+    - df (DataFrame): The input DataFrame containing the data to be visualized.
+    - perplexity (int, optional): Perplexity parameter for t-SNE. Defaults to 30.
+    - plot (bool, optional): If True, create a scatterplot. If False, return the reduced data. Defaults to True.
+    - **kwargs: Additional keyword arguments to pass to the sns.scatterplot function.
+
+    Returns:
+    If plot is True, returns a tuple (df_tsne, ax), where df_tsne is the DataFrame containing the t-SNE results
+    and ax is the scatterplot axes.
+    If plot is False, returns only df_tsne.
+
+    Example:
+    df, ax = quick_tsne(my_data, perplexity=50, palette='viridis')
+    plt.show()
+
+    """
+    X_embedded = TSNE(n_components=2, learning_rate='auto',
+                      init='pca', perplexity=perplexity).fit_transform(df.values)
+
+    df_tsne = pd.DataFrame({'tSNE-1': X_embedded[:, 0], 'tSNE-2': X_embedded[:, 1]})
+
+    if plot:
+        ax = sns.scatterplot(data=df_tsne, x='tSNE-1', y='tSNE-2', **kwargs)
+        ax.legend(bbox_to_anchor=(1, 1))
+
+        return df_tsne, ax
+    else:
+        return df_tsne
 
 
 def pycaret_score_threshold_analysis(pycaret_prediction):
