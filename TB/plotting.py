@@ -286,22 +286,6 @@ def legend_outside(ax=None, bbox_to_anchor=None, **kwargs):
         bbox_to_anchor = (1, 1.05)
     ax.legend(bbox_to_anchor=bbox_to_anchor, **kwargs)
 
-def savefig(name, fmt=["pdf", "png", "svg"], bbox_inches="tight", dpi=300):
-    """
-    Saves the current figure with various file formats and settings.
-
-    Parameters:
-    - name: Name for the saved figure.
-    - notebook_name: Name of the notebook (default: None).
-    - fmt: List of file formats to save (default: ["pdf", "png", "svg"]).
-    - bbox_inches: Bounding box in inches (default: "tight").
-    - dpi: Dots per inch (default: 300).
-    """
-    fig = plt.gcf()
-    for suffix in fmt:
-        fig.savefig(f'{name}.{suffix}', bbox_inches=bbox_inches, dpi=dpi)
-        print(f"Saved: {name}.{suffix}")
-
 def plot_dendrogram(df, labels=None, orientation="left", metric=None, color_threshold=0,
                     above_threshold_color="k", **kwargs):
     """
@@ -332,3 +316,19 @@ def plot_dendrogram(df, labels=None, orientation="left", metric=None, color_thre
         plt.xticks([])
     plt.gca().set(frame_on=False)
     return Z, T
+
+def savefig(name, fmt=["pdf", "png", "svg"], bbox_inches="tight", dpi=300):
+    """
+    Saves the current figure with various file formats and settings.
+
+    Parameters:
+    - name: Name for the saved figure.
+    - notebook_name: Name of the notebook (default: None).
+    - fmt: List of file formats to save (default: ["pdf", "png", "svg"]).
+    - bbox_inches: Bounding box in inches (default: "tight").
+    - dpi: Dots per inch (default: 300).
+    """
+    fig = plt.gcf()
+    for suffix in fmt:
+        fig.savefig(f'{name}.{suffix}', bbox_inches=bbox_inches, dpi=dpi)
+        print(f"Saved: {name}.{suffix}")
