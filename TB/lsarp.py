@@ -150,8 +150,8 @@ def get_org_info(organism):
         'PA': {
             'ORG_SHORT_NAME': 'PA',
             'ORG_LONG_NAME': 'Pseudomonas aeruginosa',
-            'QC_A_STRAIN': '',
-            'QC_D_STRAIN': '',
+            'QC_A_STRAIN': 'ATCC_27853',
+            'QC_D_STRAIN': 'BAA_2795',
             'pipeline_slug': 'pseudomonas-aeruginosa',
             'ORG_COLOR': '#fc7e97'
         },
