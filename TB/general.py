@@ -67,7 +67,7 @@ def intersects(group_a, group_b):
         group_b (list or numpy array): The second group of elements.
 
     Returns:
-        dict: A dictionary containing three lists - 'intersect' for common elements,
+        dict: A dictionary containing three sets - 'intersect' for common elements,
               'only_a' for elements unique to group_a, and 'only_b' for elements unique to group_b.
 
     Example:
@@ -75,13 +75,13 @@ def intersects(group_a, group_b):
     result = intersects([1, 2, 3], [2, 3, 4])
     print(result)
     ```
-    Output: {'intersect': [2, 3], 'only_a': [1], 'only_b': [4]}
+    Output: {'intersect': {2, 3}, 'only_a': {1}, 'only_b': {4}}
     """
-    intersect = list(np.intersect1d(group_a, group_b))
-    only_a = list(group_a)
-    only_b = list(group_b)
-    for el in intersect:
-        only_a.remove(el)
-        only_b.remove(el)
-    output = dict(intersect=intersect, only_a=only_a, only_b=only_b)
-    return output
+    set_a = set(group_a)
+    set_b = set(group_b)
+
+    intersect = set_a & set_b
+    only_a = set_a - intersect
+    only_b = set_b - intersect
+
+    return {'intersect': intersect, 'only_a': only_a, 'only_b': only_b}

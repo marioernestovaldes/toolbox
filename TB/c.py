@@ -88,15 +88,15 @@ remove_digits = lambda x: "".join([i for i in x if not i.isdigit()])
 
 # STOP
 
-with open(__file__, "r") as this_file:
-    """
-    Read the content of the current Python script (the module it's placed in) and prints the lines until it 
-    encounters a line that contains the string "STOP". It also prints the current working directory and the 
-    current date.
-    """
-    for line in this_file.readlines():
-        if re.search("STOP", line):
-            break
-        print(line, end="")
-    print(f"# Current working directory: {os.getcwd()}")
-    print(f"# Current date: {today()}")
+# with open(__file__, "r") as this_file:
+#     """
+#     Read the content of the current Python script (the module it's placed in) and prints the lines until it
+#     encounters a line that contains the string "STOP". It also prints the current working directory and the
+#     current date.
+#     """
+#     for line in this_file.readlines():
+#         if re.search("STOP", line):
+#             break
+#         print(line, end="")
+#     print(f"# Current working directory: {os.getcwd()}")
+#     print(f"# Current date: {today()}")

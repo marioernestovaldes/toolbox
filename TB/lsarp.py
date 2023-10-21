@@ -101,31 +101,44 @@ def get_org_info(organism):
     ORGS = {
         'EC': {
             'ORG_SHORT_NAME': 'EC',
+            'ORG_MID_NAME': 'E. coli',
             'ORG_LONG_NAME': 'Escherichia coli',
             'QC_A_STRAIN': 'ATCC_25922',
             'QC_D_STRAIN': 'ATCC_BAA196',
             'pipeline_slug': 'escherichia-coli',
             'ORG_COLOR': '#7391f5'
         },
-        'FAES': {
-            'ORG_SHORT_NAME': 'FAES',
-            'ORG_LONG_NAME': 'Enterococcus faecalis',
-            'QC_A_STRAIN': 'ATCC_29212',
-            'QC_D_STRAIN': 'ATCC_51299',
-            'pipeline_slug': 'enterococcus-faecalis',
-            'ORG_COLOR': '#fc7e97'
-        },
         'FAEM': {
             'ORG_SHORT_NAME': 'FAEM',
+            'ORG_MID_NAME': 'E. faecium',
             'ORG_LONG_NAME': 'Enterococcus faecium',
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
             'ORG_COLOR': '#0cb2f0'
         },
+        'FAES': {
+            'ORG_SHORT_NAME': 'FAES',
+            'ORG_MID_NAME': 'E. faecalis',
+            'ORG_LONG_NAME': 'Enterococcus faecalis',
+            'QC_A_STRAIN': 'ATCC_29212',
+            'QC_D_STRAIN': 'ATCC_51299',
+            'pipeline_slug': 'enterococcus-faecalis',
+            'ORG_COLOR': '#fc7e97'
+        },
         'GAS': {
             'ORG_SHORT_NAME': 'GAS',
-            'ORG_LONG_NAME': 'Group A Streptococcus',
+            'ORG_MID_NAME': 'S. pyogenes',
+            'ORG_LONG_NAME': 'Streptococcus pyogenes',
+            'QC_A_STRAIN': 'ATCC_19615',
+            'QC_D_STRAIN': 'ATCC_12344',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
+        'GBS': {
+            'ORG_SHORT_NAME': 'GBS',
+            'ORG_MID_NAME': 'S. agalactiae',
+            'ORG_LONG_NAME': 'Streptococcus agalactiae',
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
@@ -133,6 +146,7 @@ def get_org_info(organism):
         },
         'KO': {
             'ORG_SHORT_NAME': 'KO',
+            'ORG_MID_NAME': 'K. oxytoca',
             'ORG_LONG_NAME': 'Klebsiella oxytoca',
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
@@ -141,6 +155,7 @@ def get_org_info(organism):
         },
         'KP': {
             'ORG_SHORT_NAME': 'KP',
+            'ORG_MID_NAME': 'K. pneumoniae',
             'ORG_LONG_NAME': 'Klebsiella pneumoniae',
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
@@ -149,6 +164,7 @@ def get_org_info(organism):
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
+            'ORG_MID_NAME': 'P. aeruginosa',
             'ORG_LONG_NAME': 'Pseudomonas aeruginosa',
             'QC_A_STRAIN': 'ATCC_27853',
             'QC_D_STRAIN': 'BAA_2795',
@@ -157,6 +173,7 @@ def get_org_info(organism):
         },
         'SA': {
             'ORG_SHORT_NAME': 'SA',
+            'ORG_MID_NAME': 'S. aureus',
             'ORG_LONG_NAME': 'Staphylococcus aureus',
             'QC_A_STRAIN': 'ATCC_25923',
             'QC_D_STRAIN': 'ATCC_43300',
