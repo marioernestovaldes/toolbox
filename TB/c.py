@@ -57,6 +57,24 @@ plt.rcParams["figure.facecolor"] = "w"
 pd.options.display.max_colwidth = 100
 pd.options.display.max_columns = 100
 
+def display_df(df, rows=10, columns=10):
+    """
+    Display a Pandas DataFrame in a Jupyter Notebook with custom settings for the number of rows and columns shown.
+
+    Args:
+        df (DataFrame): The DataFrame you want to display.
+        rows (int): The maximum number of rows to display.
+        columns (int): The maximum number of columns to display.
+
+    Example:
+    ```python
+    # Display only 5 rows and 5 columns of the DataFrame
+    display_df(my_dataframe, rows=5, columns=5)
+    ```
+    """
+    with pd.option_context('display.min_rows', rows, 'display.max_rows', rows, 'display.max_columns', columns):
+        display(df)
+
 # Set Seaborn plotting context and style
 # sns.set_context("paper")
 
