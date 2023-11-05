@@ -30,7 +30,7 @@ from sklearn.preprocessing import (
 from sklearn.metrics import (
     balanced_accuracy_score,
     confusion_matrix,
-    #plot_confusion_matrix,
+    # plot_confusion_matrix,
     mean_squared_error,
 )
 from sklearn.decomposition import PCA
@@ -46,19 +46,19 @@ from matplotlib import pyplot as pl
 
 
 def hierarchical_clustering(
-    df,
-    vmin=None,
-    vmax=None,
-    show="scaled",
-    figsize=(8, 8),
-    top_height=2,
-    left_width=2,
-    xmaxticks=None,
-    ymaxticks=None,
-    metric="euclidean",
-    cmap=None,
-    scaling="standard",
-    scaling_kws=None,
+        df,
+        vmin=None,
+        vmax=None,
+        show="scaled",
+        figsize=(8, 8),
+        top_height=2,
+        left_width=2,
+        xmaxticks=None,
+        ymaxticks=None,
+        metric="euclidean",
+        cmap=None,
+        scaling="standard",
+        scaling_kws=None,
 ):
     """Generates a heatmap with hierarchical clustering from the input matrix.
 
@@ -185,6 +185,7 @@ def scale_dataframe(df, how="standard", **kwargs):
     df.loc[:, :] = scaler(**kwargs).fit_transform(df)
     return df
 
+
 def plot_missing_values(df, kind="matrix"):
     """
     Plots missing values in a DataFrame.
@@ -246,8 +247,9 @@ def knn_score(df, var_names, tgt_name, **params):
 
     return accuracy, df_coma, prediction
 
+
 def sklearn_cv_classification(
-    X, y, base_model, params={}, X_test=None, n_folds=5, seeds=None
+        X, y, base_model, params={}, X_test=None, n_folds=5, seeds=None
 ):
     """
     Perform cross-validation for a classification model using scikit-learn.
@@ -322,17 +324,17 @@ def sklearn_cv_classification(
 
 
 def sklearn_cv_binary_clf_roc(
-    X,
-    y,
-    base_model,
-    params={},
-    X_test=None,
-    n_folds=5,
-    seeds=None,
-    to_numpy=False,
-    metric=None,
-    fit_kws=None,
-    framework=None,
+        X,
+        y,
+        base_model,
+        params={},
+        X_test=None,
+        n_folds=5,
+        seeds=None,
+        to_numpy=False,
+        metric=None,
+        fit_kws=None,
+        framework=None,
 ):
     """
     Perform cross-validation for a binary classification model using scikit-learn.
@@ -412,16 +414,16 @@ def sklearn_cv_binary_clf_roc(
 
 
 def tabnet_cv_classification(
-    X,
-    y,
-    base_model,
-    params={},
-    X_test=None,
-    n_folds=5,
-    seeds=None,
-    to_numpy=False,
-    fit_kws=None,
-    metric=None,
+        X,
+        y,
+        base_model,
+        params={},
+        X_test=None,
+        n_folds=5,
+        seeds=None,
+        to_numpy=False,
+        fit_kws=None,
+        metric=None,
 ):
     """
     Perform cross-validation for a binary classification model using TabNet.
@@ -541,7 +543,7 @@ def decode_prediction(df, encoder):
 
 
 def remove_features_with_anti_target(
-    df, features, anti_target="is_test", target_auc=0.6
+        df, features, anti_target="is_test", target_auc=0.6
 ):
     """
     Remove features based on anti-target performance and a target AUC threshold.
@@ -638,10 +640,12 @@ def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactiv
         else:
             pc_cols = proj.filter(regex='PC').columns.to_list()
             ndx_names = list(proj.index.names)
-            fig = px.scatter_matrix(proj.reset_index(), color="label" if labels is not None else None, dimensions=pc_cols, hover_data=ndx_names, **plot_kws)
+            fig = px.scatter_matrix(proj.reset_index(), color="label" if labels is not None else None,
+                                    dimensions=pc_cols, hover_data=ndx_names, **plot_kws)
     return proj, fig
 
-def quick_tsne(df, perplexity=30, plot=True, **kwargs):
+
+def quick_tsne(df, perplexity=30, metric='euclidean', plot=True, **kwargs):
     """
     Perform t-SNE dimensionality reduction on a DataFrame and optionally create a scatterplot.
 
@@ -662,7 +666,8 @@ def quick_tsne(df, perplexity=30, plot=True, **kwargs):
 
     """
     X_embedded = TSNE(n_components=2, learning_rate='auto',
-                      init='pca', perplexity=perplexity).fit_transform(df.values)
+                      init='pca', perplexity=perplexity, metric=metric,
+                      random_state=42).fit_transform(df.values)
 
     df_tsne = pd.DataFrame({'tSNE-1': X_embedded[:, 0], 'tSNE-2': X_embedded[:, 1]})
 

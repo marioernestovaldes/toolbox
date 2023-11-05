@@ -68,7 +68,7 @@ def get_color_palette(data: list, data_type='qualitative'):
                                       '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6'])
         else:
             # Generate N visually distinct colors using the distinctipy library.
-            colors = distinctipy.get_colors(len(set(data)), pastel_factor=0.7)
+            colors = distinctipy.get_colors(len(set(data)), pastel_factor=1)
             return sns.color_palette(colors)
 
     elif data_type == 'sequential':
