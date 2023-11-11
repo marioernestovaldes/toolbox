@@ -36,7 +36,12 @@ def lighten_color(color, lightness_factor):
         print(f'WARNING!: {color} not in the expected format. Returning original color.')
         return color
 
-def get_color_palette(data: list, data_type='qualitative'):
+
+def rgb_to_hex(rgb):
+    return "#{:02x}{:02x}{:02x}".format(int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255))
+
+
+def get_color_palette(data: list, data_type='qualitative', hexa=True):
     """
     Get a color palette based on the data type.
 
@@ -58,18 +63,30 @@ def get_color_palette(data: list, data_type='qualitative'):
     - get_color_palette([-2, -1, 0, 1, 2], 'divergent') returns a divergent palette.
     """
     if data_type == 'qualitative':
-        if len(set(data)) <= 7:
-            # Return a predefined qualitative color palette with up to 7 colors.
-            return sns.color_palette(['#EE7733', '#0077BB', '#33BBEE', '#EE3377', '#CC3311',
-                                      '#009988', '#BBBBBB'])
-        elif len(set(data)) <= 10:
+        # if len(set(data)) <= 7:
+        #     # Return a predefined qualitative color palette with up to 7 colors.
+        #     if hexa:
+        #         return sns.color_palette(['#EE7733', '#0077BB', '#33BBEE', '#EE3377', '#CC3311',
+        #                                   '#009988', '#BBBBBB']).as_hex()[:len(set(data))]
+        #     else:
+        #         return sns.color_palette(['#EE7733', '#0077BB', '#33BBEE', '#EE3377', '#CC3311',
+        #                                   '#009988', '#BBBBBB'])[:len(set(data))]
+        if len(set(data)) <= 10:
             # Return a second qualitative color palette with up to 10 colors.
-            return sns.color_palette(['#77AADD', '#EE8866', '#EEDD88', '#FFAABB', '#99DDFF',
-                                      '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6'])
+            if hexa:
+                return sns.color_palette(['#77AADD', '#EE8866', '#EEDD88', '#FFAABB', '#99DDFF',
+                                          '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6']).as_hex()[
+                       :len(set(data)) + 1]
+            else:
+                return sns.color_palette(['#77AADD', '#EE8866', '#EEDD88', '#FFAABB', '#99DDFF',
+                                          '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6'])[:len(set(data)) + 1]
         else:
             # Generate N visually distinct colors using the distinctipy library.
             colors = distinctipy.get_colors(len(set(data)), pastel_factor=1)
-            return sns.color_palette(colors)
+            if hexa:
+                return sns.color_palette(colors).as_hex()
+            else:
+                return sns.color_palette(colors)
 
     elif data_type == 'sequential':
         # Return a sequential color palette from the seaborn library.
@@ -79,6 +96,7 @@ def get_color_palette(data: list, data_type='qualitative'):
         # Return a predefined divergent color palette.
         return ListedColormap(['#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7',
                                '#FDDBC7', '#F4A582', '#D6604D', '#B2182B'])
+
 
 def set_sns_style(style='ticks'):
     """
@@ -124,5 +142,3 @@ def set_sns_style(style='ticks'):
 
     # Set the Seaborn theme to 'ticks' with the custom style parameters
     sns.set_theme(style=style, rc=science)
-
-

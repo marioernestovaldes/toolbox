@@ -25,7 +25,7 @@ from datetime import date
 from os.path import isdir, isfile, basename, dirname, join
 from time import sleep
 from glob import glob
-from pathlib import Path as P
+from pathlib import Path
 from tqdm.notebook import tqdm
 
 from .general import time_format
