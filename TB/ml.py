@@ -644,7 +644,6 @@ def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactiv
                                     dimensions=pc_cols, hover_data=ndx_names, **plot_kws)
     return proj, fig
 
-
 def quick_tsne(df, perplexity=30, metric='euclidean', plot=True, **kwargs):
     """
     Perform t-SNE dimensionality reduction on a DataFrame and optionally create a scatterplot.
@@ -652,6 +651,7 @@ def quick_tsne(df, perplexity=30, metric='euclidean', plot=True, **kwargs):
     Parameters:
     - df (DataFrame): The input DataFrame containing the data to be visualized.
     - perplexity (int, optional): Perplexity parameter for t-SNE. Defaults to 30.
+    - metric (str, optional): The distance metric used in t-SNE. Defaults to 'euclidean'.
     - plot (bool, optional): If True, create a scatterplot. If False, return the reduced data. Defaults to True.
     - **kwargs: Additional keyword arguments to pass to the sns.scatterplot function.
 
@@ -664,19 +664,29 @@ def quick_tsne(df, perplexity=30, metric='euclidean', plot=True, **kwargs):
     df, ax = quick_tsne(my_data, perplexity=50, palette='viridis')
     plt.show()
 
+    Notes:
+    - This function uses t-SNE to reduce the dimensionality of the input DataFrame.
+    - The resulting t-SNE coordinates are stored in a new DataFrame (df_tsne).
+    - If plot is True, a scatterplot is created using seaborn.scatterplot, and the axes are returned along with df_tsne.
+    - Additional keyword arguments (kwargs) can be provided to customize the scatterplot.
+
     """
+    # Perform t-SNE dimensionality reduction
     X_embedded = TSNE(n_components=2, learning_rate='auto',
                       init='pca', perplexity=perplexity, metric=metric,
                       random_state=42).fit_transform(df.values)
 
+    # Create a DataFrame with t-SNE results
     df_tsne = pd.DataFrame({'tSNE-1': X_embedded[:, 0], 'tSNE-2': X_embedded[:, 1]})
 
     if plot:
+        # If plot is True, create a scatterplot
         ax = sns.scatterplot(data=df_tsne, x='tSNE-1', y='tSNE-2', **kwargs)
         ax.legend(bbox_to_anchor=(1, 1))
 
         return df_tsne, ax
     else:
+        # If plot is False, return only df_tsne
         return df_tsne
 
 
