@@ -40,6 +40,7 @@ def lighten_color(color, lightness_factor):
 def rgb_to_hex(rgb):
     return "#{:02x}{:02x}{:02x}".format(int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255))
 
+
 def get_color_palette(data: list, data_type='qualitative', hexa=True):
     """
     Get a color palette based on the data type.
@@ -70,10 +71,11 @@ def get_color_palette(data: list, data_type='qualitative', hexa=True):
 
     """
     if data_type == 'qualitative':
-        if len(set(data)) <= 10:
+        if len(set(data)) <= 14:
             # Return a second qualitative color palette with up to 10 colors.
             colors = ['#77AADD', '#EE8866', '#EEDD88', '#FFAABB', '#99DDFF',
-                      '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6']
+                      '#44BB99', '#BBCC33', '#AAAA00', '#DDDDDD', '#A59AE6',
+                      '#882255', '#44AA99', '#999933', '#AA4499']
             if hexa:
                 return sns.color_palette(colors).as_hex()[:len(set(data)) + 1]
             else:
