@@ -80,7 +80,7 @@ def display_df(df, rows=10, columns=10):
 # sns.set_context("paper")
 
 from .color_and_style import set_sns_style, lighten_color
-set_sns_style(style='ticks')
+set_sns_style()
 
 # Import custom functions for LSARP data
 from .lsarp import get_plate

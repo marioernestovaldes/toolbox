@@ -98,6 +98,7 @@ def get_color_palette(data: list, data_type='qualitative', hexa=True):
                   '#FDDBC7', '#F4A582', '#D6604D', '#B2182B']
         return ListedColormap(colors)
 
+
 def set_sns_style(seaborn_style='science'):
     """
     Set a customized Seaborn style with a scientific format.
@@ -106,7 +107,7 @@ def set_sns_style(seaborn_style='science'):
     - seaborn_style (str): The style to be set. Options: 'science', 'vega-lite'. Default is 'science'.
     """
     # Set the default Seaborn style
-    sns.set()
+    # sns.set()
 
     if seaborn_style == 'science':
         # Define custom style parameters for a scientific format
@@ -147,7 +148,7 @@ def set_sns_style(seaborn_style='science'):
         # Set the Seaborn theme to 'ticks' with the custom style parameters
         sns.set_theme(context='paper', style='ticks', rc=science)
 
-    elif seaborn_style == 'vega-lite':
+    elif seaborn_style == 'vega_lite':
         # Define custom style parameters for a vega-lite inspired format
         vegalite = {
             # Define font
@@ -193,6 +194,5 @@ def set_sns_style(seaborn_style='science'):
             'figure.figsize': (4, 4),
         }
 
-        # Set the Seaborn theme to 'whitegrid' with the custom style parameters
-        sns.set_theme(context='paper', style='whitegrid', rc=vegalite)
-
+        # Set the Seaborn theme to 'white' with the custom style parameters
+        sns.set_theme(context='paper', style='white', rc=vegalite)
