@@ -4,29 +4,34 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-from scipy.stats import f_oneway
+from scipy.stats import f_oneway, ttest_ind
 from adjustText import adjust_text
+from statsmodels.stats import multitest
 
 
 class Volcano:
-    def __init__(self, test_func=None):
+    def __init__(self, log2_transf=True, test_func=None):
         """
         Initialize the Volcano class.
 
         Parameters:
         - test_func: Statistical test function (e.g., f_oneway) for significance testing.
-                     Defaults to one-way ANOVA.
+                     Defaults to T-test.
         """
+        self.log2_transf = log2_transf
+
         if test_func is None:
-            self.test_func = f_oneway
-        else:
+            self.test_func = ttest_ind
+        elif callable(test_func):
             self.test_func = test_func
+        else:
+            raise ValueError(f"{test_func} should be a callable function.")
+
         self.results = None
         self.group_labels = None
         self.significance_base_level = 0.05
-        self.significance_threshold = None
 
-    def fit(self, X, y):
+    def fit(self, X, y, reference_state=None):
         """
         Perform a statistical test on the input data and calculate significance values.
 
@@ -43,7 +48,14 @@ class Volcano:
         features = data.columns.to_list()
 
         self.group_labels = self.get_group_labels(labels)
-        label_0, label_1 = self.group_labels
+
+        if reference_state:
+            label_0 = reference_state
+            label_1 = [element for element in self.group_labels if element != reference_state][0]
+        else:
+            label_0, label_1 = self.group_labels
+
+        print(f"Considering {label_0} as Reference State")
 
         data["labels"] = labels
 
@@ -63,18 +75,25 @@ class Volcano:
             except ZeroDivisionError as e:
                 results.loc[feature, ["p-value", "fold-change"]] = 1, 1
 
-        results["-log10(p-value)"] = -results["p-value"].apply(np.log10)
-        results["log2(fold-change)"] = results["fold-change"].apply(np.log2)
+        if self.log2_transf:
+            results["log2(fold-change)"] = results["fold-change"]
+        else:
+            results["log2(fold-change)"] = results["fold-change"].apply(np.log2)
+
         results.index.name = "Feature"
 
-        n_features = len(features)
+        results = results.dropna(subset=["fold-change", "p-value"])
 
-        self.significance_threshold = self.calculate_significance_threshold(
-            self.significance_base_level, n_features
-        )
+        results["p-value_corrected"] = self.pvalue_correction(results["p-value"])[1]
+        results["-log10(p-value)"] = -results["p-value_corrected"].apply(np.log10)
 
-        results["significance_threshold"] = self.significance_threshold
-        results["Significant"] = results["p-value"] < self.significance_threshold
+        results["Significant"] = self.pvalue_correction(results["p-value"])[0]
+
+        results = results[["fold-change", "log2(fold-change)", "p-value", "p-value_corrected",
+                           "-log10(p-value)", "Significant"]]
+
+        results = results.rename(columns={"fold-change": f"fold-change [{label_1} - {label_0}]",
+                                          "log2(fold-change)": f"log2(fold-change) [{label_1} - {label_0}]"})
 
         self.results = results.reset_index()
         return self.results
@@ -92,20 +111,7 @@ class Volcano:
         group_labels = list(set(labels))
         group_labels.sort()
         assert len(group_labels) == 2
-        return (group_labels[0], group_labels[1])
-
-    def calculate_significance_threshold(self, base_level, n_tials):
-        """
-        Calculate the significance threshold for multiple testing correction.
-
-        Parameters:
-        - base_level: Base significance level (e.g., 0.05).
-        - n_tials: Number of multiple testing trials.
-
-        Returns:
-        - Significance threshold.
-        """
-        return self.significance_base_level / n_tials
+        return group_labels[0], group_labels[1]
 
     def calculate_p_value(self, values_0, values_1):
         """
@@ -116,9 +122,16 @@ class Volcano:
         - values_1: Values for group 1.
 
         Returns:
-        - P-value.
+        - p-value.
         """
-        return self.test_func(values_0, values_1).pvalue
+        if self.test_func == ttest_ind:
+            return self.test_func(values_0, values_1, equal_var=False, nan_policy='omit').pvalue
+        else:
+            return self.test_func(values_0, values_1).pvalue
+
+    def pvalue_correction(self, pvals):
+
+        return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
 
     def calculate_fold_change(self, values_0, values_1):
         """
@@ -131,7 +144,10 @@ class Volcano:
         Returns:
         - Fold change.
         """
-        return np.mean(values_1) / np.mean(values_0)
+        if self.log2_transf:
+            return np.mean(values_1) - np.mean(values_0)
+        else:
+            return np.mean(values_1) / np.mean(values_0)
 
     def plot_interactive(self, minfoldchange=1, highlight=None, height=750, width=750):
         """
@@ -172,15 +188,13 @@ class Volcano:
         )
 
         fig.add_hline(
-            y=-np.log10(self.significance_threshold), line_width=0.5, line_dash="dash"
+            y=-np.log10(self.significance_base_level), line_width=0.5, line_dash="dash"
         )
 
         fig.add_vline(x=minfoldchange, line_width=0.5, line_dash="dash")
         fig.add_vline(x=-minfoldchange, line_width=0.5, line_dash="dash")
 
-        sig = self.results[(self.results.Significant)
-                           & (results[x].abs() > minfoldchange)
-                           ]
+        sig = self.results[self.results.Significant & (results[x].abs() > minfoldchange)]
 
         fig.add_trace(
             go.Scatter(
@@ -247,7 +261,7 @@ class Volcano:
         )
 
         plt.axhline(
-            y=-np.log10(self.significance_threshold), lw=0.5, ls="--", color="k"
+            y=-np.log10(self.significance_base_level), lw=0.5, ls="--", color="k"
         )
 
         plt.axvline(x=minfoldchange, lw=0.5, ls="--", color="k")
@@ -275,7 +289,7 @@ class Volcano:
             )
 
         if highlight is None:
-            annot = results[(results.Significant) & (results[x].abs() > minfoldchange)].sort_values("p-value")
+            annot = results[results.Significant & (results[x].abs() > minfoldchange)].sort_values("p-value")
             if nmaxannot is not None:
                 annot = annot.head(nmaxannot)
         else:

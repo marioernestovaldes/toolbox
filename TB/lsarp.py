@@ -184,31 +184,3 @@ def get_org_info(organism):
 
     # Retrieve and return information about the specified organism
     return ORGS[organism]
-
-# def get_treatment():
-#     from collections import defaultdict
-#     from datetime import datetime
-#
-#     def calculate_dosing_summary(antibiotics, timestamps):
-#         dosing_data = defaultdict(list)
-#         summary = []
-#
-#         for antibiotic, timestamp in zip(antibiotics, timestamps):
-#             dosing_data[antibiotic].append(datetime.strptime(timestamp, "%d%b%Y:%H:%M:%S"))
-#
-#         for antibiotic, doses in dosing_data.items():
-#             if len(doses) < 2:
-#                 summary.append(f"{antibiotic} irregular dosing")
-#             else:
-#                 time_gaps = [(doses[i] - doses[i - 1]).total_seconds() / 3600 for i in range(1, len(doses))]
-#                 avg_time_gap = sum(time_gaps) / len(time_gaps)
-#                 summary.append(f"{antibiotic} every ~{int(avg_time_gap)} hours")
-#
-#         return ", ".join(summary)
-#
-#     # Example data
-#     antibiotics = df1['drug_name'].to_list()
-#     timestamps = df1['ADMINISTERED_DT']
-#
-#     dosing_summary = calculate_dosing_summary(antibiotics, timestamps)
-#     print(dosing_summary)

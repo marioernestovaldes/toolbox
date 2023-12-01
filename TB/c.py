@@ -21,7 +21,7 @@ import matplotlib as mpl
 from IPython.core.pylabtools import figsize, getfigs
 
 # Importing date and file-related modules
-from datetime import date
+from datetime import date, datetime
 from os.path import isdir, isfile, basename, dirname, join
 from time import sleep
 from glob import glob
