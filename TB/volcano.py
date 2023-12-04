@@ -10,7 +10,7 @@ from statsmodels.stats import multitest
 
 
 class Volcano:
-    def __init__(self, log2_transf=True, test_func=None):
+    def __init__(self, log2_transf=True, test_func=None, significance_base_level=0.05):
         """
         Initialize the Volcano class.
 
@@ -29,7 +29,9 @@ class Volcano:
 
         self.results = None
         self.group_labels = None
-        self.significance_base_level = 0.05
+        self.label_0 = None
+        self.label_1 = None
+        self.significance_base_level = significance_base_level
 
     def fit(self, X, y, reference_state=None):
         """
@@ -54,6 +56,9 @@ class Volcano:
             label_1 = [element for element in self.group_labels if element != reference_state][0]
         else:
             label_0, label_1 = self.group_labels
+
+        self.label_0 = label_0
+        self.label_1 = label_1
 
         print(f"Considering {label_0} as Reference State")
 
@@ -162,7 +167,7 @@ class Volcano:
         Returns:
         - Plotly Figure for the interactive plot.
         """
-        x = "log2(fold-change)"
+        x = f"log2(fold-change) [{self.label_1} - {self.label_0}]"
         y = "-log10(p-value)"
 
         results = self.results.copy()
@@ -176,7 +181,7 @@ class Volcano:
             data_frame=results,
             y=y,
             x=x,
-            hover_data=["Feature", "p-value", "fold-change"],
+            hover_data=["Feature", "p-value", f"log2(fold-change) [{self.label_1} - {self.label_0}]"],
             height=height,
             width=width,
             color="color",
@@ -247,7 +252,7 @@ class Volcano:
         Returns:
         - Matplotlib figure for the static plot.
         """
-        x = "log2(fold-change)"
+        x = f"log2(fold-change) [{self.label_1} - {self.label_0}]"
         y = "-log10(p-value)"
 
         results = self.results.copy()
