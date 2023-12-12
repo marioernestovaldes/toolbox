@@ -1,33 +1,52 @@
-import scipy.stats
-from statsmodels.stats import multitest
 import pandas as pd
 import numpy as np
+import scipy
+from statsmodels.stats import multitest
+import logging
 
 
-class Diff_Network_Analysis:
+class DiffNetworkAnalysis:
+    """
+    A class for performing differential correlation analysis between two states (stateA and stateB).
+
+    Parameters:
+    - stateA (pd.DataFrame): Data for stateA.
+    - stateB (pd.DataFrame): Data for stateB.
+    - correlation (str): Type of correlation to be used ('pearson' or 'spearman').
+    - significance_base_level (float): Base level of significance for hypothesis testing.
+
+    Example:
+    analysis = DiffNetworkAnalysis(stateA=df_stateA, stateB=df_stateB, correlation='pearson', significance_base_level=0.01)
+    corr_stateA, corr_stateB, corr_diff = analysis.diff_corr_network()
+    """
 
     def __init__(self, stateA: pd.DataFrame = None, stateB: pd.DataFrame = None, correlation: str = 'pearson',
                  significance_base_level: float = 0.01):
         if correlation not in ['pearson', 'spearman']:
-            raise ValueError(f"{correlation} should be a 'pearson' or 'spearman.")
-
+            raise ValueError(f"{correlation} should be 'pearson' or 'spearman'.")
         self.stateA, self.stateB = stateA, stateB
         self.correlation = correlation
         self.significance_base_level = significance_base_level
 
     def diff_corr_network(self):
+        """
+        Perform differential correlation analysis between stateA and stateB.
 
-        print('Processing stateA and stateB dataframes...')
+        Returns:
+        - df_r_stateA (pd.DataFrame): Correlation network for stateA.
+        - df_r_stateB (pd.DataFrame): Correlation network for stateB.
+        - df_r_diff (pd.DataFrame): Differential correlation results between stateA and stateB.
+        """
+        logging.info('Processing stateA and stateB dataframes...')
         df_r_stateA, df_r_stateB = self.corr_network(self.stateA), self.corr_network(self.stateB)
 
-        print('Generating differential correlation for states A and B...')
+        logging.info('Generating differential correlation for states A and B...')
         df_r_diff = pd.concat([df_r_stateA[['Prot1', 'Prot2']],
                                df_r_stateA['r-value'] - df_r_stateB['r-value']], axis=1)
 
         df_r_diff['abs_diff'] = df_r_diff['r-value'].abs()
 
         df_r_diff = (
-
             df_r_diff
             .sort_values(by='abs_diff', ascending=False)
             .reset_index(drop=True)
@@ -38,7 +57,15 @@ class Diff_Network_Analysis:
         return df_r_stateA, df_r_stateB, df_r_diff
 
     def corr_network(self, df: pd.DataFrame):
+        """
+        Generate a correlation network for the given DataFrame.
 
+        Parameters:
+        - df (pd.DataFrame): Data for certain state.
+
+        Returns:
+        - df_r (pd.DataFrame): Correlation data.
+        """
         df_r = df.corr(method=self.correlation)
         df_r = df_r.unstack().reset_index()
 
@@ -63,8 +90,14 @@ class Diff_Network_Analysis:
 
     def derive_pvalues(self, correlations, n_samples):
         """
-        Calculate pvalues from correlations given the number of samples used to calculate the correlations.
-        Source: https://stackoverflow.com/a/24547964/991496
+        Calculate p-values from correlations given the number of samples used to calculate the correlations.
+
+        Parameters:
+        - correlations: Correlation values.
+        - n_samples: Number of samples.
+
+        Returns:
+        - pvals: Calculated p-values.
         """
         correlations = np.asarray(correlations)
         rf = correlations
@@ -74,4 +107,15 @@ class Diff_Network_Analysis:
         return pvals
 
     def correct_pvalues(self, pvals):
+        """
+        Correct p-values for multiple hypothesis testing.
+
+        Parameters:
+        - pvals: Original p-values.
+
+        Returns:
+        - pvals_corrected: Corrected p-values.
+        """
         return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
+
+
