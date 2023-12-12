@@ -1,11 +1,12 @@
 import scipy.stats
 from statsmodels.stats import multitest
 import pandas as pd
+import numpy as np
 
 
 class Diff_Network_Analysis:
 
-    def __init__(self, stateA: pd.DataFrame, stateB: pd.DataFrame, correlation: str = 'pearson',
+    def __init__(self, stateA: pd.DataFrame = None, stateB: pd.DataFrame = None, correlation: str = 'pearson',
                  significance_base_level: float = 0.01):
         if correlation not in ['pearson', 'spearman']:
             raise ValueError(f"{correlation} should be a 'pearson' or 'spearman.")
@@ -16,8 +17,10 @@ class Diff_Network_Analysis:
 
     def diff_corr_network(self):
 
+        print('Processing stateA and stateB dataframes...')
         df_r_stateA, df_r_stateB = self.corr_network(self.stateA), self.corr_network(self.stateB)
 
+        print('Generating differential correlation for states A and B...')
         df_r_diff = pd.concat([df_r_stateA[['Prot1', 'Prot2']],
                                df_r_stateA['r-value'] - df_r_stateB['r-value']], axis=1)
 
@@ -51,26 +54,10 @@ class Diff_Network_Analysis:
         df_r.columns = ['Prot1', 'Prot2', 'r-value']
 
         df_r['r-value_abs'] = df_r['r-value'].abs()
-        df_r['p-value_corrected'] = pvalues_corrected
+        df_r['p-value_corrected'] = pvalues_corrected[1]
+        df_r[f'hypothesis rejected for alpha = {self.significance_base_level}'] = pvalues_corrected[0]
 
         df_r['r-value'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
-
-        # df_r_mssa = (
-
-        #     df_r_mssa
-        #     [(df_r_mssa['p-value_corrected'] <= 0.01)]
-        #     .dropna(subset='r-value')
-        #     .sort_values(by='r-value')
-        #     .reset_index(drop=True)
-        # )
-
-        # df_r_mssa = (
-
-        #     df_r_mssa
-        #     .set_index(['Prot1', 'Prot2'])
-        #     .reindex(df_r_mssa.set_index(['Prot1', 'Prot2']).index)
-        #     .reset_index()
-        # )
 
         return df_r
 
