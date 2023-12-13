@@ -4,6 +4,7 @@ import pandas as pd
 import scipy.special
 from statsmodels.stats import multitest
 
+
 class DiffNetworkAnalysis:
     """
     A class for performing differential correlation analysis between two states (stateA and stateB).
@@ -146,4 +147,3 @@ class DiffNetworkAnalysis:
         - pvals_corrected: Corrected p-values.
         """
         return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
-
