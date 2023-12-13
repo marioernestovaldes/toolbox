@@ -50,8 +50,13 @@ class DiffNetworkAnalysis:
         df_r_stateA, df_r_stateB = self.corr_network(self.stateA), self.corr_network(self.stateB)
 
         logging.info('Generating differential correlation for states A and B...')
-        df_r_diff = pd.concat([df_r_stateA[['Prot1', 'Prot2']],
-                               df_r_stateA['r-value'] - df_r_stateB['r-value']], axis=1)
+        df_r_diff = pd.concat(
+            [
+                df_r_stateA[['Prot1', 'Prot2']],
+                df_r_stateA['r-value'] - df_r_stateB['r-value'],
+                (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
+                 df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
+            ], axis=1)
 
         df_r_diff['abs_diff'] = df_r_diff['r-value'].abs()
 
@@ -78,17 +83,17 @@ class DiffNetworkAnalysis:
         df_r = df.corr(method=self.correlation)
         df_r = df_r.unstack()
 
-        pairs = df_r.index.to_list()
-
-        # Count matching non-NaN values for each pair using numpy
-        matching_counts = []
-
-        for col1, col2 in pairs:
-            matching_count = np.sum(~np.isnan(df[col1]) & ~np.isnan(df[col2]))
-            matching_counts.append({'Prot1': col1, 'Prot2': col2, 'MatchingNonNaNCount': matching_count})
+        # pairs = df_r.index.to_list()
+        #
+        # # Count matching non-NaN values for each pair using numpy
+        # matching_counts = []
+        #
+        # for col1, col2 in pairs:
+        #     matching_count = np.sum(~np.isnan(df[col1]) & ~np.isnan(df[col2]))
+        #     matching_counts.append({'Prot1': col1, 'Prot2': col2, 'MatchingNonNaNCount': matching_count})
 
         # Create a DataFrame with the results
-        n_samples_df = pd.DataFrame(matching_counts)
+        n_samples_df = self.pairwise_non_nan_values(df)
 
         # calculate p-values
         pvalues = self.derive_pvalues(df_r.to_list(), n_samples_df['MatchingNonNaNCount'])
@@ -110,6 +115,21 @@ class DiffNetworkAnalysis:
         df_r = pd.merge(df_r, n_samples_df, on=['Prot1', 'Prot2'])
 
         return df_r
+
+    def pairwise_non_nan_values(self, df: pd.DataFrame):
+
+        cols = df.columns
+        mat = df.to_numpy(dtype=float, na_value=np.nan, copy=False).T
+
+        mask = np.isfinite(mat)
+
+        pairwise_non_nan_values = []
+
+        for i, col_i in zip(range(0, df.shape[1]), cols):
+            for j, col_j in zip(range(0, df.shape[1]), cols):
+                pairwise_non_nan_values.append([col_i, col_j, (mask[i] & mask[j]).sum()])
+
+        return pd.DataFrame(pairwise_non_nan_values, columns=['Prot1', 'Prot2', 'MatchingNonNaNCount'])
 
     def derive_pvalues(self, correlations, n_samples):
         """
