@@ -67,16 +67,27 @@ class DiffNetworkAnalysis:
         - df_r (pd.DataFrame): Correlation data.
         """
         df_r = df.corr(method=self.correlation)
-        df_r = df_r.unstack().reset_index()
+        df_r = df_r.unstack()
 
-        n_samples = df.shape[0]
-        n_features = df.shape[1]
+        pairs = df_r.index.to_list()
+
+        # Count matching non-NaN values for each pair using numpy
+        matching_counts = []
+
+        for col1, col2 in pairs:
+            matching_count = np.sum(~np.isnan(df[col1]) & ~np.isnan(df[col2]))
+            matching_counts.append({'Prot1': col1, 'Prot2': col2, 'MatchingNonNaNCount': matching_count})
+
+        # Create a DataFrame with the results
+        n_samples_df = pd.DataFrame(matching_counts)
 
         # calculate p-values
-        pvalues = self.derive_pvalues(df_r[0], n_samples)
+        pvalues = self.derive_pvalues(df_r.to_list(), n_samples_df['MatchingNonNaNCount'])
 
         # multiple hypothesis correction
         pvalues_corrected = self.correct_pvalues(pvalues)
+
+        df_r = df_r.reset_index()
 
         df_r.columns = ['Prot1', 'Prot2', 'r-value']
 
@@ -85,6 +96,9 @@ class DiffNetworkAnalysis:
         df_r[f'hypothesis rejected for alpha = {self.significance_base_level}'] = pvalues_corrected[0]
 
         df_r['r-value'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
+        df_r['r-value_abs'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
+
+        df_r = pd.merge(df_r, n_samples_df, on=['Prot1', 'Prot2'])
 
         return df_r
 
@@ -99,11 +113,16 @@ class DiffNetworkAnalysis:
         Returns:
         - pvals: Calculated p-values.
         """
-        correlations = np.asarray(correlations)
-        rf = correlations
-        df = n_samples - 2
-        ts = rf * rf * (df / (1 - rf * rf))
-        pvals = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts))
+        pvals = []
+        for correlation, n_sample in zip(correlations, n_samples):
+            rf = 0.9999 if correlation == 1 else correlation
+            df = n_sample - 2
+            ts = rf * rf * (df / (1 - rf * rf))
+
+            pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts))
+
+            pvals.append(pval)
+
         return pvals
 
     def correct_pvalues(self, pvals):
@@ -117,5 +136,3 @@ class DiffNetworkAnalysis:
         - pvals_corrected: Corrected p-values.
         """
         return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
-
-
