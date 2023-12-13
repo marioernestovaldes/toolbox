@@ -117,18 +117,40 @@ class DiffNetworkAnalysis:
         return df_r
 
     def pairwise_non_nan_values(self, df: pd.DataFrame):
+        """
+        Calculate the pairwise count of non-NaN values for each column combination in a DataFrame.
 
+        This function iterates through each pair of columns in the provided DataFrame,
+        calculating the count of non-NaN entries that both columns share. This is useful for
+        understanding the overlap of non-missing data between different features in the dataset.
+
+        Parameters:
+        df (pd.DataFrame): A pandas DataFrame with any number of columns.
+
+        Returns:
+        pd.DataFrame: A DataFrame with three columns - 'Prot1', 'Prot2', and 'MatchingNonNaNCount'.
+                      'Prot1' and 'Prot2' represent the column pairs, and 'MatchingNonNaNCount'
+                      is the count of non-NaN values shared between these columns.
+        """
         cols = df.columns
+
+        # Convert the DataFrame to a numpy array, treating NaNs as np.nan
         mat = df.to_numpy(dtype=float, na_value=np.nan, copy=False).T
 
+        # Create a mask that identifies where non-NaN values are located
         mask = np.isfinite(mat)
 
+        # Initialize a list to store the pairwise non-NaN value counts
         pairwise_non_nan_values = []
 
+        # Iterate through all pairs of columns
         for i, col_i in zip(range(0, df.shape[1]), cols):
             for j, col_j in zip(range(0, df.shape[1]), cols):
-                pairwise_non_nan_values.append([col_i, col_j, (mask[i] & mask[j]).sum()])
+                # Count the number of positions where both columns have non-NaN values
+                non_nan_count = (mask[i] & mask[j]).sum()
+                pairwise_non_nan_values.append([col_i, col_j, non_nan_count])
 
+        # Return the results as a DataFrame
         return pd.DataFrame(pairwise_non_nan_values, columns=['Prot1', 'Prot2', 'MatchingNonNaNCount'])
 
     def derive_pvalues(self, correlations, n_samples):
