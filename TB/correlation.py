@@ -1,9 +1,8 @@
-import pandas as pd
-import numpy as np
-import scipy
-from statsmodels.stats import multitest
 import logging
-
+import numpy as np
+import pandas as pd
+import scipy.special
+from statsmodels.stats import multitest
 
 class DiffNetworkAnalysis:
     """
@@ -13,7 +12,7 @@ class DiffNetworkAnalysis:
     - stateA (pd.DataFrame): Data for stateA.
     - stateB (pd.DataFrame): Data for stateB.
     - correlation (str): Type of correlation to be used ('pearson' or 'spearman').
-    - significance_base_level (float): Base level of significance for hypothesis testing.
+    - significance_base_level (float): Base level of significance for hypothesis testing (between 0 and 1).
 
     Example:
     analysis = DiffNetworkAnalysis(stateA=df_stateA, stateB=df_stateB, correlation='pearson', significance_base_level=0.01)
@@ -22,6 +21,15 @@ class DiffNetworkAnalysis:
 
     def __init__(self, stateA: pd.DataFrame = None, stateB: pd.DataFrame = None, correlation: str = 'pearson',
                  significance_base_level: float = 0.01):
+        """
+        Constructor for DiffNetworkAnalysis class.
+
+        Parameters:
+        - stateA (pd.DataFrame): Data for stateA.
+        - stateB (pd.DataFrame): Data for stateB.
+        - correlation (str): Type of correlation to be used ('pearson' or 'spearman').
+        - significance_base_level (float): Base level of significance for hypothesis testing (between 0 and 1).
+        """
         if correlation not in ['pearson', 'spearman']:
             raise ValueError(f"{correlation} should be 'pearson' or 'spearman'.")
         self.stateA, self.stateB = stateA, stateB
@@ -113,14 +121,16 @@ class DiffNetworkAnalysis:
         Returns:
         - pvals: Calculated p-values.
         """
+        # Define a constant for avoiding magic numbers
+        NA_CORRECTION = 0.9999
+
         pvals = []
         for correlation, n_sample in zip(correlations, n_samples):
-            rf = 0.9999 if correlation == 1 else correlation
+            rf = NA_CORRECTION if correlation == 1 else correlation
             df = n_sample - 2
             ts = rf * rf * (df / (1 - rf * rf))
 
             pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts))
-
             pvals.append(pval)
 
         return pvals
@@ -136,3 +146,4 @@ class DiffNetworkAnalysis:
         - pvals_corrected: Corrected p-values.
         """
         return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
+
