@@ -9,9 +9,10 @@ class DiffNetworkAnalysis:
     """
     A class for performing differential correlation analysis between two states (stateA and stateB).
 
-    This class calculates the differential correlation network for two different states of a biological or chemical system.
-    It involves calculating correlation networks for each state and then determining the differences between these networks.
-    The class also includes methods for handling NaN values and correcting for multiple hypothesis testing.
+    This class calculates the differential correlation network for two different states of a biological or chemical
+    system. It involves calculating correlation networks for each state and then determining the differences between
+    these networks. The class also includes methods for handling NaN values and correcting for multiple hypothesis
+    testing.
 
     Parameters:
     - stateA (pd.DataFrame): Data for stateA.
@@ -22,7 +23,8 @@ class DiffNetworkAnalysis:
     - significance_base_level (float): Base level of significance for hypothesis testing (between 0 and 1).
 
     Example:
-    analysis = DiffNetworkAnalysis(stateA=df_stateA, label_A='State A', stateB=df_stateB, label_B='State B',
+    analysis = DiffNetworkAnalysis(stateA=df_stateA, label_A='State A',
+                                   stateB=df_stateB, label_B='State B',
                                    correlation='pearson', significance_base_level=0.01)
     corr_stateA, corr_stateB, corr_diff = analysis.diff_corr_network()
     """
