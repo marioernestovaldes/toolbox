@@ -9,30 +9,33 @@ class DiffNetworkAnalysis:
     """
     A class for performing differential correlation analysis between two states (stateA and stateB).
 
+    This class calculates the differential correlation network for two different states of a biological or chemical system.
+    It involves calculating correlation networks for each state and then determining the differences between these networks.
+    The class also includes methods for handling NaN values and correcting for multiple hypothesis testing.
+
     Parameters:
     - stateA (pd.DataFrame): Data for stateA.
+    - label_A (str): Label for stateA.
     - stateB (pd.DataFrame): Data for stateB.
+    - label_B (str): Label for stateB.
     - correlation (str): Type of correlation to be used ('pearson' or 'spearman').
     - significance_base_level (float): Base level of significance for hypothesis testing (between 0 and 1).
 
     Example:
-    analysis = DiffNetworkAnalysis(stateA=df_stateA, stateB=df_stateB, correlation='pearson', significance_base_level=0.01)
+    analysis = DiffNetworkAnalysis(stateA=df_stateA, label_A='State A', stateB=df_stateB, label_B='State B',
+                                   correlation='pearson', significance_base_level=0.01)
     corr_stateA, corr_stateB, corr_diff = analysis.diff_corr_network()
     """
 
     def __init__(self,
                  stateA: pd.DataFrame = None, label_A: str = None,
                  stateB: pd.DataFrame = None, label_B: str = None,
-                 correlation: str = 'pearson',
-                 significance_base_level: float = 0.01):
+                 correlation: str = 'pearson', significance_base_level: float = 0.01):
         """
         Constructor for DiffNetworkAnalysis class.
 
-        Parameters:
-        - stateA (pd.DataFrame): Data for stateA.
-        - stateB (pd.DataFrame): Data for stateB.
-        - correlation (str): Type of correlation to be used ('pearson' or 'spearman').
-        - significance_base_level (float): Base level of significance for hypothesis testing (between 0 and 1).
+        Initializes the class with the provided states, labels, correlation type, and significance level.
+        It also validates the correlation type to ensure it is either 'pearson' or 'spearman'.
         """
         if correlation not in ['pearson', 'spearman']:
             raise ValueError(f"{correlation} should be 'pearson' or 'spearman'.")
@@ -44,6 +47,9 @@ class DiffNetworkAnalysis:
     def diff_corr_network(self):
         """
         Perform differential correlation analysis between stateA and stateB.
+
+        This method computes the correlation networks for each state and then calculates
+        the differences between these networks. It also filters based on the significance of the differences.
 
         Returns:
         - df_r_stateA (pd.DataFrame): Correlation network for stateA.
@@ -82,45 +88,45 @@ class DiffNetworkAnalysis:
         """
         Generate a correlation network for the given DataFrame.
 
+        This method calculates the correlation matrix for the provided DataFrame and
+        transforms it into a format suitable for network analyses. It also handles NaN values
+        and computes p-values and their corrections.
+
         Parameters:
-        - df (pd.DataFrame): Data for certain state.
+        - df (pd.DataFrame): Data for a certain state.
 
         Returns:
-        - df_r (pd.DataFrame): Correlation data.
+        - df_r (pd.DataFrame): Correlation data with additional statistics.
         """
-        df_r = df.corr(method=self.correlation)
-        df_r = df_r.unstack()
+        df_r = df.corr(method=self.correlation).astype(float)
 
-        # pairs = df_r.index.to_list()
-        #
-        # # Count matching non-NaN values for each pair using numpy
-        # matching_counts = []
-        #
-        # for col1, col2 in pairs:
-        #     matching_count = np.sum(~np.isnan(df[col1]) & ~np.isnan(df[col2]))
-        #     matching_counts.append({'Prot1': col1, 'Prot2': col2, 'matching_nonNaN_count': matching_count})
+        # Set the upper triangle of the symmetric dataframe to NaN
+        upper_triangle_indices = np.triu_indices(n=df_r.shape[0], k=0)  # Get the indices for the upper triangle
+        df_r.values[upper_triangle_indices] = np.nan  # Set the upper triangle values to NaN
 
-        # Create a DataFrame with the results
+        # Transform the pairwise matrix into a dataframe suitable for network analyses
+        df_r = (
+            df_r
+            .unstack()
+            .reset_index()
+            .rename(columns={'level_0': 'Prot1', 'level_1': 'Prot2', 0: 'r-value'})
+        )
+
+        # Create a DataFrame with the matching_nonNaN_count per protein pair
         n_samples_df = self.pairwise_non_nan_values(df)
 
-        # calculate p-values
-        pvalues = self.derive_pvalues(df_r.to_list(), n_samples_df['matching_nonNaN_count'])
+        df_r = pd.merge(n_samples_df, df_r, on=['Prot1', 'Prot2'])
 
-        # multiple hypothesis correction
+        df_r = df_r.dropna(axis=0).reset_index(drop=True)
+
+        # Calculate p-values and use multiple hypothesis correction
+        pvalues = self.derive_pvalues(df_r['r-value'], df_r['matching_nonNaN_count'])
         pvalues_corrected = self.correct_pvalues(pvalues)
 
-        df_r = df_r.reset_index()
-
-        df_r.columns = ['Prot1', 'Prot2', 'r-value']
-
         df_r['r-value_abs'] = df_r['r-value'].abs()
+        df_r['p-value'] = pvalues
         df_r['p-value_corrected'] = pvalues_corrected[1]
         df_r[f'hypothesis rejected for alpha = {self.significance_base_level}'] = pvalues_corrected[0]
-
-        df_r['r-value'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
-        df_r['r-value_abs'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value_abs'], axis=1)
-
-        df_r = pd.merge(df_r, n_samples_df, on=['Prot1', 'Prot2'])
 
         if label:
             df_r['label'] = label
