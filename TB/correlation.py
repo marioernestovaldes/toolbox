@@ -20,7 +20,10 @@ class DiffNetworkAnalysis:
     corr_stateA, corr_stateB, corr_diff = analysis.diff_corr_network()
     """
 
-    def __init__(self, stateA: pd.DataFrame = None, stateB: pd.DataFrame = None, correlation: str = 'pearson',
+    def __init__(self,
+                 stateA: pd.DataFrame = None, label_A: str = None,
+                 stateB: pd.DataFrame = None, label_B: str = None,
+                 correlation: str = 'pearson',
                  significance_base_level: float = 0.01):
         """
         Constructor for DiffNetworkAnalysis class.
@@ -34,6 +37,7 @@ class DiffNetworkAnalysis:
         if correlation not in ['pearson', 'spearman']:
             raise ValueError(f"{correlation} should be 'pearson' or 'spearman'.")
         self.stateA, self.stateB = stateA, stateB
+        self.label_A, self.label_B = label_A, label_B
         self.correlation = correlation
         self.significance_base_level = significance_base_level
 
@@ -47,30 +51,34 @@ class DiffNetworkAnalysis:
         - df_r_diff (pd.DataFrame): Differential correlation results between stateA and stateB.
         """
         logging.info('Processing stateA and stateB dataframes...')
-        df_r_stateA, df_r_stateB = self.corr_network(self.stateA), self.corr_network(self.stateB)
+        df_r_stateA = self.corr_network(self.stateA, label=self.label_A)
+        df_r_stateB = self.corr_network(self.stateB, label=self.label_B)
 
         logging.info('Generating differential correlation for states A and B...')
         df_r_diff = pd.concat(
             [
                 df_r_stateA[['Prot1', 'Prot2']],
+                df_r_stateA['r-value'], df_r_stateB['r-value'],
                 df_r_stateA['r-value'] - df_r_stateB['r-value'],
                 (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
                  df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
             ], axis=1)
 
-        df_r_diff['abs_diff'] = df_r_diff['r-value'].abs()
+        df_r_diff.columns = ['Prot1', 'Prot2', f'r-value_{self.label_A}', f'r-value_{self.label_B}',
+                             'Corr_diff', f'hypothesis rejected for alpha = {self.significance_base_level}']
+
+        df_r_diff['abs_diff'] = df_r_diff['Corr_diff'].abs()
 
         df_r_diff = (
             df_r_diff
             .sort_values(by='abs_diff', ascending=False)
             .reset_index(drop=True)
-            .drop('abs_diff', axis=1).
-            rename(columns={'r-value': 'Corr_diff'})
+            .drop('abs_diff', axis=1)
         )
 
         return df_r_stateA, df_r_stateB, df_r_diff
 
-    def corr_network(self, df: pd.DataFrame):
+    def corr_network(self, df: pd.DataFrame, label=None):
         """
         Generate a correlation network for the given DataFrame.
 
@@ -90,13 +98,13 @@ class DiffNetworkAnalysis:
         #
         # for col1, col2 in pairs:
         #     matching_count = np.sum(~np.isnan(df[col1]) & ~np.isnan(df[col2]))
-        #     matching_counts.append({'Prot1': col1, 'Prot2': col2, 'MatchingNonNaNCount': matching_count})
+        #     matching_counts.append({'Prot1': col1, 'Prot2': col2, 'matching_nonNaN_count': matching_count})
 
         # Create a DataFrame with the results
         n_samples_df = self.pairwise_non_nan_values(df)
 
         # calculate p-values
-        pvalues = self.derive_pvalues(df_r.to_list(), n_samples_df['MatchingNonNaNCount'])
+        pvalues = self.derive_pvalues(df_r.to_list(), n_samples_df['matching_nonNaN_count'])
 
         # multiple hypothesis correction
         pvalues_corrected = self.correct_pvalues(pvalues)
@@ -110,9 +118,12 @@ class DiffNetworkAnalysis:
         df_r[f'hypothesis rejected for alpha = {self.significance_base_level}'] = pvalues_corrected[0]
 
         df_r['r-value'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
-        df_r['r-value_abs'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value'], axis=1)
+        df_r['r-value_abs'] = df_r.apply(lambda x: np.nan if x['Prot1'] == x['Prot2'] else x['r-value_abs'], axis=1)
 
         df_r = pd.merge(df_r, n_samples_df, on=['Prot1', 'Prot2'])
+
+        if label:
+            df_r['label'] = label
 
         return df_r
 
@@ -128,8 +139,8 @@ class DiffNetworkAnalysis:
         df (pd.DataFrame): A pandas DataFrame with any number of columns.
 
         Returns:
-        pd.DataFrame: A DataFrame with three columns - 'Prot1', 'Prot2', and 'MatchingNonNaNCount'.
-                      'Prot1' and 'Prot2' represent the column pairs, and 'MatchingNonNaNCount'
+        pd.DataFrame: A DataFrame with three columns - 'Prot1', 'Prot2', and 'matching_nonNaN_count'.
+                      'Prot1' and 'Prot2' represent the column pairs, and 'matching_nonNaN_count'
                       is the count of non-NaN values shared between these columns.
         """
         cols = df.columns
@@ -151,7 +162,7 @@ class DiffNetworkAnalysis:
                 pairwise_non_nan_values.append([col_i, col_j, non_nan_count])
 
         # Return the results as a DataFrame
-        return pd.DataFrame(pairwise_non_nan_values, columns=['Prot1', 'Prot2', 'MatchingNonNaNCount'])
+        return pd.DataFrame(pairwise_non_nan_values, columns=['Prot1', 'Prot2', 'matching_nonNaN_count'])
 
     def derive_pvalues(self, correlations, n_samples):
         """
