@@ -47,6 +47,23 @@ class Volcano:
 
         features = data.columns.to_list()
 
+        self.setup_groups(labels, reference_state)
+
+        data["labels"] = labels
+
+        grps = data.groupby("labels")
+        grp_0, grp_1 = grps.get_group(self.stateA), grps.get_group(self.stateB)
+
+        results = self.calculate_feature_statistics(data.drop("labels", axis=1).columns.to_list(), grp_0, grp_1)
+
+        results = self.transform_and_correct_results(results)
+
+        self.results = results.reset_index().sort_values(by=[f"log2(fold-change) [{self.stateB} - {self.stateA}]",
+                                                             "-log10(p-value)"],
+                                                         ascending=False).reset_index(drop=True)
+        return self.results
+
+    def setup_groups(self, labels, reference_state):
         self.group_labels = self.get_group_labels(labels)
 
         if reference_state:
@@ -56,17 +73,9 @@ class Volcano:
             stateA, stateB = self.group_labels
 
         self.stateA, self.stateB = stateA, stateB
+        print(f"Considering {self.stateA} as Reference State and using {self.test_func} for significance testing...")
 
-        print(f"Considering {stateA} as Reference State and using {self.test_func} for significance testing...")
-
-        data["labels"] = labels
-
-        grps = data.groupby("labels")
-        grp_0, grp_1 = grps.get_group(stateA), grps.get_group(stateB)
-
-        p_values = []
-        fold_changes = []
-
+    def calculate_feature_statistics(self, features, grp_0, grp_1):
         results = pd.DataFrame()
 
         for feature in features:
@@ -74,31 +83,31 @@ class Volcano:
                 p_value = self.calculate_p_value(grp_0[feature], grp_1[feature])
                 fold_change = self.calculate_fold_change(grp_0[feature], grp_1[feature])
                 results.loc[feature, ["p-value", "fold-change"]] = p_value, fold_change
-            except ZeroDivisionError as e:
-                results.loc[feature, ["p-value", "fold-change"]] = 1, 1
+            except:
+                print(f"Exception for {feature}... assigning p-value, fold-change = 1, 0 respectively")
+                results.loc[feature, ["p-value", "fold-change"]] = 1, 0
 
+        return results
+
+    def transform_and_correct_results(self, results):
         if self.log2_transf:
             results["log2(fold-change)"] = results["fold-change"]
         else:
             results["log2(fold-change)"] = results["fold-change"].apply(np.log2)
 
         results.index.name = "Feature"
-
         results = results.dropna(subset=["fold-change", "p-value"])
 
         results["p-value_corrected"] = self.pvalue_correction(results["p-value"])[1]
         results["-log10(p-value)"] = -results["p-value_corrected"].apply(np.log10)
-
         results["Significant"] = self.pvalue_correction(results["p-value"])[0]
 
-        results = results[["fold-change", "log2(fold-change)", "p-value", "p-value_corrected",
-                           "-log10(p-value)", "Significant"]]
+        results = results[
+            ["fold-change", "log2(fold-change)", "p-value", "p-value_corrected", "-log10(p-value)", "Significant"]]
+        results = results.rename(columns={"fold-change": f"fold-change [{self.stateB} - {self.stateA}]",
+                                          "log2(fold-change)": f"log2(fold-change) [{self.stateB} - {self.stateA}]"})
 
-        results = results.rename(columns={"fold-change": f"fold-change [{stateB} - {stateA}]",
-                                          "log2(fold-change)": f"log2(fold-change) [{stateB} - {stateA}]"})
-
-        self.results = results.reset_index()
-        return self.results
+        return results
 
     def get_group_labels(self, labels):
         """
@@ -177,10 +186,10 @@ class Volcano:
 
         results = self.results.copy()
 
-        results['color'] = 'a'
+        results['color'] = 'silver'
 
         results.loc[results.Significant & (results[x] > minfoldchange), 'color'] = 'b'
-        results.loc[results.Significant & (results[x] < -minfoldchange), 'color'] = 'c'
+        results.loc[results.Significant & (results[x] < -minfoldchange), 'color'] = 'r'
 
         fig = px.scatter(
             data_frame=results,
@@ -189,11 +198,11 @@ class Volcano:
             hover_data=["Feature", "p-value", f"log2(fold-change) [{self.stateB} - {self.stateA}]"],
             height=height,
             width=width,
-            color="color",
+            color='color',
         )
 
         fig.update_traces(
-            marker=dict(size=12, line=dict(width=2, color="DarkSlateGrey")),
+            marker=dict(size=7, line=dict(width=1, color="DarkSlateGrey")),
             selector=dict(mode="markers"),
         )
 
@@ -230,9 +239,9 @@ class Volcano:
                 )
                   * 1.1,
                 mode="text",
-                text=self.group_labels,
+                text=[self.stateA, self.stateB],
                 name="Group",
-                textposition="middle center",
+                textposition="top center",
                 textfont=dict(color="crimson"),
                 marker=dict(size=3),
                 hoverinfo="skip",
