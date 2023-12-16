@@ -183,12 +183,23 @@ class DiffNetworkAnalysis:
         Returns:
         - pvals: Calculated p-values.
         """
-        # Define a constant for avoiding magic numbers
-        NA_CORRECTION = 0.9999
+        # Define constants for avoiding magic numbers
+        PERFECT_POSITIVE_CORR_CORRECTION = 0.9999
+        PERFECT_NEGATIVE_CORR_CORRECTION = -0.9999
+        ZERO_CORR_CORRECTION = 0.0001
 
         pvals = []
         for correlation, n_sample in zip(correlations, n_samples):
-            rf = NA_CORRECTION if correlation == 1 else correlation
+
+            if correlation == 1:
+                rf = PERFECT_POSITIVE_CORR_CORRECTION
+            if correlation == -1:
+                rf = PERFECT_NEGATIVE_CORR_CORRECTION
+            elif correlation == 0:
+                rf = ZERO_CORR_CORRECTION
+            else:
+                rf = correlation
+
             df = n_sample - 2
             ts = rf * rf * (df / (1 - rf * rf))
 
