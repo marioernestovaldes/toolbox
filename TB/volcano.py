@@ -4,47 +4,45 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-from scipy.stats import f_oneway, ttest_ind
+from scipy.stats import f_oneway, ttest_ind, mannwhitneyu
 from adjustText import adjust_text
 from statsmodels.stats import multitest
 
 
 class Volcano:
-    def __init__(self, log2_transf=True, test_func=None, significance_base_level=0.05):
+    def __init__(self, log2_transf=True, test_func=mannwhitneyu, significance_base_level=0.05):
         """
         Initialize the Volcano class.
 
         Parameters:
-        - test_func: Statistical test function (e.g., f_oneway) for significance testing.
-                     Defaults to T-test.
+        - test_func: Statistical test function (e.g., mannwhitneyu) for significance testing.
+                     Defaults to Mann-Whitney U rank test on two independent samples.
         """
         self.log2_transf = log2_transf
 
-        if test_func is None:
-            self.test_func = ttest_ind
-        elif callable(test_func):
+        if callable(test_func):
             self.test_func = test_func
         else:
             raise ValueError(f"{test_func} should be a callable function.")
 
         self.results = None
         self.group_labels = None
-        self.label_0 = None
-        self.label_1 = None
+        self.stateA = None
+        self.stateB = None
         self.significance_base_level = significance_base_level
 
-    def fit(self, X, y, reference_state=None):
+    def fit(self, df: pd.DataFrame, y: list, reference_state=None):
         """
         Perform a statistical test on the input data and calculate significance values.
 
         Parameters:
-        - X: DataFrame with features.
+        - df: DataFrame with features.
         - y: List of labels for grouping.
 
         Returns:
         - DataFrame with calculated significance values, including p-values and fold changes.
         """
-        data = pd.DataFrame(X)
+        data = pd.DataFrame(df)
         labels = list(y)
 
         features = data.columns.to_list()
@@ -52,20 +50,19 @@ class Volcano:
         self.group_labels = self.get_group_labels(labels)
 
         if reference_state:
-            label_0 = reference_state
-            label_1 = [element for element in self.group_labels if element != reference_state][0]
+            stateA = reference_state
+            stateB = [element for element in self.group_labels if element != reference_state][0]
         else:
-            label_0, label_1 = self.group_labels
+            stateA, stateB = self.group_labels
 
-        self.label_0 = label_0
-        self.label_1 = label_1
+        self.stateA, self.stateB = stateA, stateB
 
-        print(f"Considering {label_0} as Reference State")
+        print(f"Considering {stateA} as Reference State and using {self.test_func} for significance testing...")
 
         data["labels"] = labels
 
         grps = data.groupby("labels")
-        grp_0, grp_1 = grps.get_group(label_0), grps.get_group(label_1)
+        grp_0, grp_1 = grps.get_group(stateA), grps.get_group(stateB)
 
         p_values = []
         fold_changes = []
@@ -97,8 +94,8 @@ class Volcano:
         results = results[["fold-change", "log2(fold-change)", "p-value", "p-value_corrected",
                            "-log10(p-value)", "Significant"]]
 
-        results = results.rename(columns={"fold-change": f"fold-change [{label_1} - {label_0}]",
-                                          "log2(fold-change)": f"log2(fold-change) [{label_1} - {label_0}]"})
+        results = results.rename(columns={"fold-change": f"fold-change [{stateB} - {stateA}]",
+                                          "log2(fold-change)": f"log2(fold-change) [{stateB} - {stateA}]"})
 
         self.results = results.reset_index()
         return self.results
@@ -129,7 +126,9 @@ class Volcano:
         Returns:
         - p-value.
         """
-        if self.test_func == ttest_ind:
+        if self.test_func == mannwhitneyu:
+            return self.test_func(values_0, values_1, nan_policy='omit').pvalue
+        elif self.test_func == ttest_ind:
             return self.test_func(values_0, values_1, equal_var=False, nan_policy='omit').pvalue
         else:
             return self.test_func(values_0, values_1).pvalue
@@ -137,6 +136,12 @@ class Volcano:
     def pvalue_correction(self, pvals):
 
         return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
+
+    def select_ratio(self, values_0, values_1, is_log2_transf=True):
+        if is_log2_transf:
+            return values_1 - values_0
+        else:
+            return values_1 / values_0
 
     def calculate_fold_change(self, values_0, values_1):
         """
@@ -149,10 +154,10 @@ class Volcano:
         Returns:
         - Fold change.
         """
-        if self.log2_transf:
-            return np.mean(values_1) - np.mean(values_0)
+        if self.test_func == mannwhitneyu:
+            return self.select_ratio(np.nanmedian(values_0), np.nanmedian(values_1), is_log2_transf=self.log2_transf)
         else:
-            return np.mean(values_1) / np.mean(values_0)
+            return self.select_ratio(np.nanmean(values_0), np.nanmean(values_1), is_log2_transf=self.log2_transf)
 
     def plot_interactive(self, minfoldchange=1, highlight=None, height=750, width=750):
         """
@@ -167,7 +172,7 @@ class Volcano:
         Returns:
         - Plotly Figure for the interactive plot.
         """
-        x = f"log2(fold-change) [{self.label_1} - {self.label_0}]"
+        x = f"log2(fold-change) [{self.stateB} - {self.stateA}]"
         y = "-log10(p-value)"
 
         results = self.results.copy()
@@ -181,7 +186,7 @@ class Volcano:
             data_frame=results,
             y=y,
             x=x,
-            hover_data=["Feature", "p-value", f"log2(fold-change) [{self.label_1} - {self.label_0}]"],
+            hover_data=["Feature", "p-value", f"log2(fold-change) [{self.stateB} - {self.stateA}]"],
             height=height,
             width=width,
             color="color",
@@ -252,7 +257,7 @@ class Volcano:
         Returns:
         - Matplotlib figure for the static plot.
         """
-        x = f"log2(fold-change) [{self.label_1} - {self.label_0}]"
+        x = f"log2(fold-change) [{self.stateB} - {self.stateA}]"
         y = "-log10(p-value)"
 
         results = self.results.copy()
