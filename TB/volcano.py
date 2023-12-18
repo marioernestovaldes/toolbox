@@ -269,15 +269,18 @@ class Volcano:
         x = f"log2(fold-change) [{self.stateB} - {self.stateA}]"
         y = "-log10(p-value)"
 
+        plt.clf()
+
         results = self.results.copy()
-        n_results = len(results)
-        results["_colors_"] = get_colors(
-            results.Significant, results[x], [minfoldchange] * n_results
-        )
+
+        fig, ax = plt.subplots()
 
         g = sns.scatterplot(
-            data=results, x=x, y=y, hue="_colors_", legend=legend, **kwargs
+            data=results, x=x, y=y, c=[_get_color_(log_fc) for log_fc in results[x].to_list()],
+            legend=legend, ax=ax, **kwargs
         )
+
+        g.set_xlim(-(results[x].max()), results[x].max())
 
         plt.axhline(
             y=-np.log10(self.significance_base_level), lw=0.5, ls="--", color="k"
@@ -297,7 +300,7 @@ class Volcano:
             text = plt.text(
                 x_groups[i],
                 y_groups[i],
-                self.group_labels[i],
+                [self.stateA, self.stateB][i],
                 color=".3",
                 horizontalalignment=halign[i],
                 transform=ax.transAxes,
@@ -314,15 +317,15 @@ class Volcano:
         else:
             annot = results[results.Feature.isin(highlight)]
 
-        # Add metabolite labels
+        # Add labels
         texts = []
         for ndx, row in annot.iterrows():
             x_value = row[x]
             y_value = row[y]
             _text = row["Feature"]
 
-            if highlight is not None:
-                plt.plot(x_value, y_value, mfc='none', mew=1, mec='cyan', marker='o')
+            # if highlight is not None:
+            #     plt.plot(x_value, y_value, mfc='none', mew=1, mec='cyan', marker='o')
             text = plt.text(
                 x_value, y_value, _text, color="black", horizontalalignment="center"
             )
@@ -331,10 +334,11 @@ class Volcano:
         adjust_text(texts, arrowprops=dict(arrowstyle="->", color="k", lw=0.5))
 
         sns.despine()
-        return plt.gcf()
+
+        return fig
 
 
-def _get_color_(sig, log_fc, minfoldchange=1):
+def _get_color_(log_fc, minfoldchange=1):
     """
     Get colors for points on the volcano plot.
 
@@ -346,12 +350,9 @@ def _get_color_(sig, log_fc, minfoldchange=1):
     Returns:
     - Color for the point.
     """
-    if sig:
-        if log_fc >= minfoldchange:
-            return "C2"
-        elif log_fc <= -minfoldchange:
-            return "C3"
-    return "C1"
-
-
-get_colors = np.vectorize(_get_color_)
+    if log_fc >= minfoldchange:
+        return "#EE7733"
+    elif log_fc <= -minfoldchange:
+        return "#009988"
+    else:
+        return "#BBBBBB"
