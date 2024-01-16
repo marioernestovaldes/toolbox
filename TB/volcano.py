@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 from scipy.stats import f_oneway, ttest_ind, mannwhitneyu
 from adjustText import adjust_text
 from statsmodels.stats import multitest
+import sys
 
 
 class Volcano:
@@ -81,9 +82,13 @@ class Volcano:
         for feature in features:
             try:
                 p_value = self.calculate_p_value(grp_0[feature], grp_1[feature])
+
+                p_value = sys.float_info.min if p_value == 0 else p_value
+
                 fold_change = self.calculate_fold_change(grp_0[feature], grp_1[feature])
                 results.loc[feature, ["p-value", "fold-change"]] = p_value, fold_change
-            except:
+            except Exception as e:
+                print(e)
                 print(f"Exception for {feature}... assigning p-value, fold-change = 1, 0 respectively")
                 results.loc[feature, ["p-value", "fold-change"]] = 1, 0
 
