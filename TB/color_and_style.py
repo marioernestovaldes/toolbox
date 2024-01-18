@@ -125,7 +125,8 @@ def set_sns_style(seaborn_style='science'):
             'savefig.pad_inches': 0.05,
 
             # Use serif fonts for text and math symbols
-            'font.family': 'serif',
+            'font.family': 'sans-serif',  # change to 'serif' if we want Times New Roman font
+            'font.sans-serif': 'Arial',   # change to 'Times New Roman' if we want Times New Roman font
             'mathtext.fontset': 'dejavuserif',
 
             # Customize the y-axis ticks

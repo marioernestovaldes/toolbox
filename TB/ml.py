@@ -644,6 +644,7 @@ def quick_pca(df, n_components=2, labels=None, plot=True, scale=True, interactiv
                                     dimensions=pc_cols, hover_data=ndx_names, **plot_kws)
     return proj, fig
 
+
 def quick_tsne(df, perplexity=30, metric='euclidean', plot=True, **kwargs):
     """
     Perform t-SNE dimensionality reduction on a DataFrame and optionally create a scatterplot.
