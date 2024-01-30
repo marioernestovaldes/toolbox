@@ -16,10 +16,10 @@ def get_plate(x, organism):
     if organism in ['SA', 'KP', 'KO', 'EC', 'PA']:
         # For organisms with 2-letter codes, the plate identifier is the first 5 characters of the sample identifier.
         return x[:5]
-    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS']:
+    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS', 'CNS']:
         # For organisms with 3-letter codes, the plate identifier is the first 6 characters of the sample identifier.
         return x[:6]
-    elif organism in ['FAES', 'FAEM']:
+    elif organism in ['FAES', 'FAEM', 'FAEM_MS3']:
         # For organisms with 4-letter codes, the plate identifier is the first 7 characters of the sample identifier.
         return x[:7]
     else:
@@ -99,6 +99,15 @@ def get_org_info(organism):
 
     # Dictionary containing information about different organisms
     ORGS = {
+        'CNS': {
+            'ORG_SHORT_NAME': 'CNS',
+            'ORG_MID_NAME': 'S. lugdunensis',
+            'ORG_LONG_NAME': 'Staphylococcus lugdunensis',
+            'QC_A_STRAIN': 'ATCC_12228',
+            'QC_D_STRAIN': 'ATCC_15305',
+            'pipeline_slug': 'staphylococcus-aureus',
+            'ORG_COLOR': '#7391f5'
+        },
         'EC': {
             'ORG_SHORT_NAME': 'EC',
             'ORG_MID_NAME': 'E. coli',
@@ -109,6 +118,15 @@ def get_org_info(organism):
             'ORG_COLOR': '#7391f5'
         },
         'FAEM': {
+            'ORG_SHORT_NAME': 'FAEM',
+            'ORG_MID_NAME': 'E. faecium',
+            'ORG_LONG_NAME': 'Enterococcus faecium',
+            'QC_A_STRAIN': 'ATCC_35667',
+            'QC_D_STRAIN': 'ATCC_700221',
+            'pipeline_slug': 'enterococcus-faecium',
+            'ORG_COLOR': '#0cb2f0'
+        },
+        'FAEM_MS3': {
             'ORG_SHORT_NAME': 'FAEM',
             'ORG_MID_NAME': 'E. faecium',
             'ORG_LONG_NAME': 'Enterococcus faecium',

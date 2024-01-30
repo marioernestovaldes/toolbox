@@ -281,7 +281,8 @@ class Volcano:
         fig, ax = plt.subplots()
 
         g = sns.scatterplot(
-            data=results, x=x, y=y, c=[_get_color_(log_fc) for log_fc in results[x].to_list()],
+            data=results, x=x, y=y, c=[_get_color_(log10_p, log_fc) for log10_p, log_fc in zip(results[y].to_list(),
+                                                                                               results[x].to_list())],
             legend=legend, ax=ax, **kwargs
         )
 
@@ -336,14 +337,15 @@ class Volcano:
             )
             texts.append(text)
 
-        adjust_text(texts, arrowprops=dict(arrowstyle="->", color="k", lw=0.5))
+        if len(texts) > 0:
+            adjust_text(texts, arrowprops=dict(arrowstyle="->", color="k", lw=0.5))
 
         sns.despine()
 
         return fig
 
 
-def _get_color_(log_fc, minfoldchange=1):
+def _get_color_(log10_p, log_fc, minfoldchange=1):
     """
     Get colors for points on the volcano plot.
 
@@ -355,9 +357,9 @@ def _get_color_(log_fc, minfoldchange=1):
     Returns:
     - Color for the point.
     """
-    if log_fc >= minfoldchange:
+    if log_fc >= minfoldchange and log10_p >= 1.3:
         return "#EE7733"
-    elif log_fc <= -minfoldchange:
+    elif log_fc <= -minfoldchange and log10_p >= 1.3:
         return "#009988"
     else:
         return "#BBBBBB"
