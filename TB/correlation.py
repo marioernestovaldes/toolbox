@@ -191,11 +191,11 @@ class DiffNetworkAnalysis:
         pvals = []
         for correlation, n_sample in zip(correlations, n_samples):
 
-            if correlation == 1:
+            if np.isclose(correlation, 1):
                 rf = PERFECT_POSITIVE_CORR_CORRECTION
-            if correlation == -1:
+            elif np.isclose(correlation, -1):
                 rf = PERFECT_NEGATIVE_CORR_CORRECTION
-            elif correlation == 0:
+            elif np.isclose(correlation, 0):
                 rf = ZERO_CORR_CORRECTION
             else:
                 rf = correlation
