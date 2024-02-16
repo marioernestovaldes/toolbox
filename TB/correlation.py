@@ -30,20 +30,21 @@ class DiffNetworkAnalysis:
     """
 
     def __init__(self,
-                 stateA: pd.DataFrame = None, label_A: str = None,
-                 stateB: pd.DataFrame = None, label_B: str = None,
-                 correlation: str = 'pearson', significance_base_level: float = 0.01):
+                 stateA: pd.DataFrame = None, label_A: str = None, stateA_correlation: str = 'pearson',
+                 stateB: pd.DataFrame = None, label_B: str = None, stateB_correlation: str = 'pearson',
+                 significance_base_level: float = 0.01):
         """
         Constructor for DiffNetworkAnalysis class.
 
         Initializes the class with the provided states, labels, correlation type, and significance level.
         It also validates the correlation type to ensure it is either 'pearson' or 'spearman'.
         """
-        if correlation not in ['pearson', 'spearman']:
-            raise ValueError(f"{correlation} should be 'pearson' or 'spearman'.")
+        print(f"Using {stateA_correlation} for {label_A}...")
+        print(f"Using {stateB_correlation} for {label_B}...")
         self.stateA, self.stateB = stateA, stateB
         self.label_A, self.label_B = label_A, label_B
-        self.correlation = correlation
+        self.stateA_correlation = stateA_correlation
+        self.stateB_correlation = stateB_correlation
         self.significance_base_level = significance_base_level
 
     def diff_corr_network(self):
@@ -59,8 +60,8 @@ class DiffNetworkAnalysis:
         - df_r_diff (pd.DataFrame): Differential correlation results between stateA and stateB.
         """
         logging.info('Processing stateA and stateB dataframes...')
-        df_r_stateA = self.corr_network(self.stateA, label=self.label_A)
-        df_r_stateB = self.corr_network(self.stateB, label=self.label_B)
+        df_r_stateA = self.corr_network(self.stateA, label=self.label_A, correlation=self.stateA_correlation)
+        df_r_stateB = self.corr_network(self.stateB, label=self.label_B, correlation=self.stateB_correlation)
 
         logging.info('Generating differential correlation for states A and B...')
         df_r_diff = pd.concat(
@@ -86,7 +87,7 @@ class DiffNetworkAnalysis:
 
         return df_r_stateA, df_r_stateB, df_r_diff
 
-    def corr_network(self, df: pd.DataFrame, label=None):
+    def corr_network(self, df: pd.DataFrame, label: str=None, correlation='pearson'):
         """
         Generate a correlation network for the given DataFrame.
 
@@ -100,7 +101,7 @@ class DiffNetworkAnalysis:
         Returns:
         - df_r (pd.DataFrame): Correlation data with additional statistics.
         """
-        df_r = df.corr(method=self.correlation).astype(float)
+        df_r = df.corr(method=correlation).astype(float)
 
         # Set the upper triangle of the symmetric dataframe to NaN
         upper_triangle_indices = np.triu_indices(n=df_r.shape[0], k=0)  # Get the indices for the upper triangle
