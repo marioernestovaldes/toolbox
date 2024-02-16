@@ -162,6 +162,42 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#EE8866'
         },
+        'GCS': {
+            'ORG_SHORT_NAME': 'GCS',
+            'ORG_MID_NAME': 'S. dysgalactiae',
+            'ORG_LONG_NAME': 'Streptococcus dysgalactiae',
+            'QC_A_STRAIN': 'ATCC_12388',
+            'QC_D_STRAIN': 'ATCC_35666',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
+        'GDS': {
+            'ORG_SHORT_NAME': 'GDS',
+            'ORG_MID_NAME': 'S. pasteurianus',
+            'ORG_LONG_NAME': 'Streptococcus pasteurianus',
+            'QC_A_STRAIN': 'ATCC_9809',
+            'QC_D_STRAIN': 'ATCC_33317',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
+        'GGS': {
+            'ORG_SHORT_NAME': 'GGS',
+            'ORG_MID_NAME': 'S. dysgalactiae',
+            'ORG_LONG_NAME': 'Streptococcus dysgalactiae',
+            'QC_A_STRAIN': 'ATCC_12394A',
+            'QC_D_STRAIN': 'ATCC_12394D',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
+        'Group_Strep': {
+            'ORG_SHORT_NAME': 'GS',
+            'ORG_MID_NAME': 'Group_Strep',
+            'ORG_LONG_NAME': 'Group Streptococcus',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#EE8866'
+        },
         'KO': {
             'ORG_SHORT_NAME': 'KO',
             'ORG_MID_NAME': 'K. oxytoca',
