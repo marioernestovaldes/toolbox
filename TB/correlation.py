@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.special
 from statsmodels.stats import multitest
+from scipy.stats import binom_test
 
 
 class DiffNetworkAnalysis:
@@ -66,14 +67,14 @@ class DiffNetworkAnalysis:
         logging.info('Generating differential correlation for states A and B...')
         df_r_diff = pd.concat(
             [
-                df_r_stateA[['Prot1', 'Prot2']],
+                df_r_stateA[['Prot1', 'Prot2', 'Prot_pair']],
                 df_r_stateA['r-value'], df_r_stateB['r-value'],
                 df_r_stateA['r-value'] - df_r_stateB['r-value'],
                 (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
                  df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
             ], axis=1)
 
-        df_r_diff.columns = ['Prot1', 'Prot2', f'r-value_{self.label_A}', f'r-value_{self.label_B}',
+        df_r_diff.columns = ['Prot1', 'Prot2', 'Prot_pair', f'r-value_{self.label_A}', f'r-value_{self.label_B}',
                              'Corr_diff', f'hypothesis rejected for alpha = {self.significance_base_level}']
 
         df_r_diff['abs_diff'] = df_r_diff['Corr_diff'].abs()
@@ -115,6 +116,8 @@ class DiffNetworkAnalysis:
             .rename(columns={'level_0': 'Prot1', 'level_1': 'Prot2', 0: 'r-value'})
         )
 
+        df_r['Prot_pair'] = df_r['Prot1'] + '-' + df_r['Prot2']
+
         # Create a DataFrame with the matching_nonNaN_count per protein pair
         n_samples_df = self.pairwise_non_nan_values(df)
 
@@ -122,8 +125,14 @@ class DiffNetworkAnalysis:
 
         df_r = df_r.dropna(axis=0).reset_index(drop=True)
 
+        df_r = df_r[['Prot1', 'Prot2', 'Prot_pair', 'matching_nonNaN_count', 'r-value']]
+
         # Calculate p-values and use multiple hypothesis correction
-        pvalues = self.derive_pvalues(df_r['r-value'], df_r['matching_nonNaN_count'])
+        if correlation == 'accuracy_score':
+            pvalues = self.derive_pvalues_accuracies(df_r['r-value'], df_r['matching_nonNaN_count'], df)
+        else:
+            pvalues = self.derive_pvalues(df_r['r-value'], df_r['matching_nonNaN_count'])
+
         pvalues_corrected = self.correct_pvalues(pvalues)
 
         df_r['r-value_abs'] = df_r['r-value'].abs()
@@ -205,6 +214,32 @@ class DiffNetworkAnalysis:
             ts = rf * rf * (df / (1 - rf * rf))
 
             pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts))
+            pvals.append(pval)
+
+        return pvals
+
+    def derive_pvalues_accuracies(self, accuracies, n_samples, df: pd.DataFrame):
+        """
+        Calculate p-values from accuracy scores for imbalanced datasets.
+
+        Parameters:
+        - accuracies: Accuracy values (as proportions, e.g., 0.9 for 90% accuracy).
+        - n_samples: Number of samples used to calculate each accuracy score.
+        - df: Dataframe to calculate the proportion of the majority class in the dataset.
+
+        Returns:
+        - pvals: Calculated p-values for each accuracy score, considering dataset imbalance.
+        """
+        pvals = []
+        for accuracy, n_sample in zip(accuracies, n_samples):
+            # Number of observed successes
+            observed_successes = int(round(accuracy * n_sample))
+
+            # Adjusted null hypothesis accuracy for imbalanced datasets
+            null_accuracy = df.stack().value_counts(normalize=True).iloc[0]
+
+            # Calculate the binomial test p-value
+            pval = binom_test(observed_successes, n_sample, null_accuracy)
             pvals.append(pval)
 
         return pvals
