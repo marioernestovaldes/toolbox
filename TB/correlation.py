@@ -33,6 +33,7 @@ class DiffNetworkAnalysis:
     def __init__(self,
                  stateA: pd.DataFrame = None, label_A: str = None, stateA_correlation: str = 'pearson',
                  stateB: pd.DataFrame = None, label_B: str = None, stateB_correlation: str = 'pearson',
+                 replace_zeros: bool = True,
                  significance_base_level: float = 0.01):
         """
         Constructor for DiffNetworkAnalysis class.
@@ -40,12 +41,11 @@ class DiffNetworkAnalysis:
         Initializes the class with the provided states, labels, correlation type, and significance level.
         It also validates the correlation type to ensure it is either 'pearson' or 'spearman'.
         """
-        print(f"Using {stateA_correlation} for {label_A}...")
-        print(f"Using {stateB_correlation} for {label_B}...")
         self.stateA, self.stateB = stateA, stateB
         self.label_A, self.label_B = label_A, label_B
         self.stateA_correlation = stateA_correlation
         self.stateB_correlation = stateB_correlation
+        self.replace_zeros = replace_zeros
         self.significance_base_level = significance_base_level
 
     def diff_corr_network(self):
@@ -60,22 +60,41 @@ class DiffNetworkAnalysis:
         - df_r_stateB (pd.DataFrame): Correlation network for stateB.
         - df_r_diff (pd.DataFrame): Differential correlation results between stateA and stateB.
         """
-        logging.info('Processing stateA and stateB dataframes...')
-        df_r_stateA = self.corr_network(self.stateA, label=self.label_A, correlation=self.stateA_correlation)
-        df_r_stateB = self.corr_network(self.stateB, label=self.label_B, correlation=self.stateB_correlation)
+        print(f'Processing stateA and stateB dataframes with replace_zeros={self.replace_zeros}')
+        print(f"Using {self.stateA_correlation} for {self.label_A}...")
+        df_r_stateA = self.corr_network(self.stateA, label=self.label_A, correlation=self.stateA_correlation,
+                                        replace_zeros=self.replace_zeros)
 
-        logging.info('Generating differential correlation for states A and B...')
-        df_r_diff = pd.concat(
-            [
-                df_r_stateA[['Prot1', 'Prot2', 'Prot_pair']],
-                df_r_stateA['r-value'], df_r_stateB['r-value'],
-                df_r_stateA['r-value'] - df_r_stateB['r-value'],
-                (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
-                 df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
-            ], axis=1)
+        print(f"Using {self.stateB_correlation} for {self.label_B}...")
+        df_r_stateB = self.corr_network(self.stateB, label=self.label_B, correlation=self.stateB_correlation,
+                                        replace_zeros=self.replace_zeros)
 
-        df_r_diff.columns = ['Prot1', 'Prot2', 'Prot_pair', f'r-value_{self.label_A}', f'r-value_{self.label_B}',
-                             'Corr_diff', f'hypothesis rejected for alpha = {self.significance_base_level}']
+        print('Generating differential correlation for states A and B...')
+
+        # df_r_diff = pd.concat(
+        #     [
+        #         df_r_stateA[['Prot1', 'Prot2', 'Prot_pair']],
+        #         df_r_stateA['r-value'], df_r_stateA['matching_nonNaN_count'],
+        #         df_r_stateB['r-value'], df_r_stateB['matching_nonNaN_count'],
+        #         df_r_stateA['r-value'] - df_r_stateB['r-value'],
+        #         (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
+        #          df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
+        #     ], axis=1)
+        #
+        # df_r_diff.columns = ['Prot1', 'Prot2', 'Prot_pair',
+        #                      f'r-value_{self.label_A}', f'matching_nonNaN_count_{self.label_A}',
+        #                      f'r-value_{self.label_B}', f'matching_nonNaN_count_{self.label_B}',
+        #                      'Corr_diff', f'hypothesis rejected for alpha = {self.significance_base_level}']
+
+        df_r_diff = pd.merge(df_r_stateA, df_r_stateB,
+                             on=['Prot1', 'Prot2', 'Prot_pair'], how='outer',
+                             suffixes=(f'_{self.label_A}', f'_{self.label_B}'))
+
+        df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}'] = (
+                    df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}_{self.label_A}'] &
+                    df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}_{self.label_B}']
+        )
+        df_r_diff['Corr_diff'] = df_r_diff[f'r-value_{self.label_A}'] - df_r_diff[f'r-value_{self.label_B}']
 
         df_r_diff['abs_diff'] = df_r_diff['Corr_diff'].abs()
 
@@ -86,9 +105,12 @@ class DiffNetworkAnalysis:
             .drop('abs_diff', axis=1)
         )
 
+        df_r_diff = df_r_diff.dropna(
+            subset=[f'r-value_{self.label_A}', f'r-value_{self.label_B}', 'Corr_diff']).reset_index(drop=True)
+
         return df_r_stateA, df_r_stateB, df_r_diff
 
-    def corr_network(self, df: pd.DataFrame, label: str=None, correlation='pearson'):
+    def corr_network(self, df: pd.DataFrame, label: str=None, correlation='pearson', replace_zeros=True):
         """
         Generate a correlation network for the given DataFrame.
 
@@ -102,6 +124,9 @@ class DiffNetworkAnalysis:
         Returns:
         - df_r (pd.DataFrame): Correlation data with additional statistics.
         """
+        if replace_zeros:
+            df = df.replace(0, np.nan)
+
         df_r = df.corr(method=correlation).astype(float)
 
         # Set the upper triangle of the symmetric dataframe to NaN
@@ -213,7 +238,7 @@ class DiffNetworkAnalysis:
             df = n_sample - 2
             ts = rf * rf * (df / (1 - rf * rf))
 
-            pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts))
+            pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts)) if df > 2 else 1
             pvals.append(pval)
 
         return pvals
