@@ -71,21 +71,6 @@ class DiffNetworkAnalysis:
 
         print('Generating differential correlation for states A and B...')
 
-        # df_r_diff = pd.concat(
-        #     [
-        #         df_r_stateA[['Prot1', 'Prot2', 'Prot_pair']],
-        #         df_r_stateA['r-value'], df_r_stateA['matching_nonNaN_count'],
-        #         df_r_stateB['r-value'], df_r_stateB['matching_nonNaN_count'],
-        #         df_r_stateA['r-value'] - df_r_stateB['r-value'],
-        #         (df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'] &
-        #          df_r_stateA[f'hypothesis rejected for alpha = {self.significance_base_level}'])
-        #     ], axis=1)
-        #
-        # df_r_diff.columns = ['Prot1', 'Prot2', 'Prot_pair',
-        #                      f'r-value_{self.label_A}', f'matching_nonNaN_count_{self.label_A}',
-        #                      f'r-value_{self.label_B}', f'matching_nonNaN_count_{self.label_B}',
-        #                      'Corr_diff', f'hypothesis rejected for alpha = {self.significance_base_level}']
-
         df_r_diff = pd.merge(df_r_stateA, df_r_stateB,
                              on=['Prot1', 'Prot2', 'Prot_pair'], how='outer',
                              suffixes=(f'_{self.label_A}', f'_{self.label_B}'))
@@ -124,7 +109,7 @@ class DiffNetworkAnalysis:
         Returns:
         - df_r (pd.DataFrame): Correlation data with additional statistics.
         """
-        if replace_zeros:
+        if replace_zeros and not self.is_dataframe_binary_with_nan(df):
             df = df.replace(0, np.nan)
 
         df_r = df.corr(method=correlation).astype(float)
@@ -169,6 +154,21 @@ class DiffNetworkAnalysis:
             df_r['label'] = label
 
         return df_r
+
+    def is_dataframe_binary_with_nan(self, df: pd.DataFrame):
+        """
+        Check if a pandas DataFrame contains only binary data (0 and 1) and possibly NaN values in all columns.
+
+        Parameters:
+        - df: pandas DataFrame to check.
+
+        Returns:
+        - True if all columns in the DataFrame contain only 0, 1, and possibly NaN, False otherwise.
+        """
+        for col in df.columns:
+            if not set(df[col].dropna().unique()).issubset({0, 1}):
+                return False
+        return True
 
     def pairwise_non_nan_values(self, df: pd.DataFrame):
         """
