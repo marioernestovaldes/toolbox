@@ -151,7 +151,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#bbaaee'
         },
         'GBS': {
             'ORG_SHORT_NAME': 'GBS',
@@ -160,7 +160,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#64b7cc'
         },
         'GCS': {
             'ORG_SHORT_NAME': 'GCS',
@@ -169,7 +169,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12388',
             'QC_D_STRAIN': 'ATCC_35666',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#eedd88'
         },
         'GDS': {
             'ORG_SHORT_NAME': 'GDS',
@@ -178,7 +178,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_9809',
             'QC_D_STRAIN': 'ATCC_33317',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#f4a261'
         },
         'GGS': {
             'ORG_SHORT_NAME': 'GGS',
@@ -187,7 +187,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12394A',
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#bbcc33'
         },
         'Group_Strep': {
             'ORG_SHORT_NAME': 'GS',
@@ -196,25 +196,25 @@ def get_org_info(organism):
             'QC_A_STRAIN': '',
             'QC_D_STRAIN': '',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#a9dfbf'
         },
         'KO': {
-            'ORG_SHORT_NAME': 'KO',
-            'ORG_MID_NAME': 'K. oxytoca',
-            'ORG_LONG_NAME': 'Klebsiella oxytoca',
+            'ORG_SHORT_NAME': 'KOc',
+            'ORG_MID_NAME': 'K. oxytoca complex',
+            'ORG_LONG_NAME': 'Klebsiella oxytoca complex',
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#c24a4a'
         },
         'KP': {
-            'ORG_SHORT_NAME': 'KP',
-            'ORG_MID_NAME': 'K. pneumoniae',
-            'ORG_LONG_NAME': 'Klebsiella pneumoniae',
+            'ORG_SHORT_NAME': 'KPc',
+            'ORG_MID_NAME': 'K. pneumoniae complex',
+            'ORG_LONG_NAME': 'Klebsiella pneumoniae complex',
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#44BB99'
+            'ORG_COLOR': '#44bb99'
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
@@ -223,7 +223,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_27853',
             'QC_D_STRAIN': 'BAA_2795',
             'pipeline_slug': 'pseudomonas-aeruginosa',
-            'ORG_COLOR': '#fc7e97'
+            'ORG_COLOR': '#0173b2'
         },
         'SA': {
             'ORG_SHORT_NAME': 'SA',
@@ -232,7 +232,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_25923',
             'QC_D_STRAIN': 'ATCC_43300',
             'pipeline_slug': 'staphylococcus-aureus',
-            'ORG_COLOR': '#EE8866'
+            'ORG_COLOR': '#ee8866'
         }
     }
 
