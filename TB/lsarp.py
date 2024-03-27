@@ -157,8 +157,8 @@ def get_org_info(organism):
             'ORG_SHORT_NAME': 'GBS',
             'ORG_MID_NAME': 'S. agalactiae',
             'ORG_LONG_NAME': 'Streptococcus agalactiae',
-            'QC_A_STRAIN': 'ATCC_19615',
-            'QC_D_STRAIN': 'ATCC_12344',
+            'QC_A_STRAIN': 'ATCC_13813',
+            'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#64b7cc'
         },
