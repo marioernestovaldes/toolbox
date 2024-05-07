@@ -84,4 +84,4 @@ def intersects(group_a, group_b):
     only_a = set_a - intersect
     only_b = set_b - intersect
 
-    return {'intersect': intersect, 'only_a': only_a, 'only_b': only_b}
+    return {'intersect': list(intersect), 'only_a': list(only_a), 'only_b': list(only_b)}

@@ -7,6 +7,10 @@ import logging
 import warnings
 warnings.filterwarnings('ignore')
 
+# Ignore specific Matplotlib warnings
+import logging
+logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
+
 import pandas as pd
 import polars as pl
 import numpy as np

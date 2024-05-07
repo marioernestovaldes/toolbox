@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.special
 from statsmodels.stats import multitest
-from scipy.stats import binom_test
+from scipy.stats import binomtest
 
 
 class DiffNetworkAnalysis:
@@ -264,7 +264,7 @@ class DiffNetworkAnalysis:
             null_accuracy = df.stack().value_counts(normalize=True).iloc[0]
 
             # Calculate the binomial test p-value
-            pval = binom_test(observed_successes, n_sample, null_accuracy)
+            pval = binomtest(observed_successes, n_sample, null_accuracy)
             pvals.append(pval)
 
         return pvals
