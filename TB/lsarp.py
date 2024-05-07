@@ -1,6 +1,7 @@
 import os, glob
 import re
 
+
 def get_plate(x, organism):
     """
     Get the plate identifier from a sample identifier based on the organism.
@@ -25,6 +26,7 @@ def get_plate(x, organism):
     else:
         # If the organism is not recognized, return None or raise an exception, depending on your requirements.
         return None  # Modify this part based on your specific use case
+
 
 def get_row(x):
     """
@@ -55,6 +57,7 @@ def get_row(x):
     # Return None if no match is found
     return None
 
+
 def get_date(x):
     """
     This function searches for a date pattern within the input string 'x' and extracts it.
@@ -79,6 +82,7 @@ def get_date(x):
     # Return None if no date pattern is found
     return None
 
+
 def get_org_info(organism):
     """
     Retrieve information about specific organisms.
@@ -98,6 +102,10 @@ def get_org_info(organism):
     """
 
     # Dictionary containing information about different organisms
+
+    color_p = ['#77aadd', '#ee8866', '#eedd88', '#ff4d6d', '#33bbee', '#44bb99', '#bbcc33',
+               '#ffb3c1', '#ffba08', '#882255', '#dddddd', '#c9184a', '#aa4499']
+
     ORGS = {
         'CNS': {
             'ORG_SHORT_NAME': 'CNS',
@@ -106,7 +114,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12228',
             'QC_D_STRAIN': 'ATCC_15305',
             'pipeline_slug': 'staphylococcus-aureus',
-            'ORG_COLOR': '#7391f5'
+            'ORG_COLOR': '#7391f5',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'EC': {
             'ORG_SHORT_NAME': 'EC',
@@ -115,7 +126,12 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_25922',
             'QC_D_STRAIN': 'ATCC_BAA196',
             'pipeline_slug': 'escherichia-coli',
-            'ORG_COLOR': '#7391f5'
+            'ORG_COLOR': '#7391f5',
+            'AofI': 'ANTIBIOTIC: Ampicillin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: cc',  # Column of Interest
+            'Col_of_I_colors': {'ST131 Cplx': color_p[7], 'ST95 Cplx': color_p[8], 'ST73 Cplx': color_p[2],
+                                'ST69 Cplx': color_p[3], 'ST14 Cplx': color_p[4], 'ST12 Cplx': color_p[5],
+                                'ST10 Cplx': color_p[6]}  # Colors assigned to Column of Interest
         },
         'FAEM': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -124,7 +140,11 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#0cb2f0'
+            'ORG_COLOR': '#0cb2f0',
+            'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: clades',  # Column of Interest
+            'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
+                                'B': color_p[5]}  # Colors assigned to Column of Interest
         },
         'FAEM_MS3': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -133,7 +153,11 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#0cb2f0'
+            'ORG_COLOR': '#0cb2f0',
+            'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: clades',  # Column of Interest
+            'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
+                                'B': color_p[5]}  # Colors assigned to Column of Interest
         },
         'FAES': {
             'ORG_SHORT_NAME': 'FAES',
@@ -142,7 +166,12 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_29212',
             'QC_D_STRAIN': 'ATCC_51299',
             'pipeline_slug': 'enterococcus-faecalis',
-            'ORG_COLOR': '#fc7e97'
+            'ORG_COLOR': '#fc7e97',
+            'AofI': 'ANTIBIOTIC: Gentamicin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {'179': color_p[0], '40': color_p[1], '16': color_p[2],
+                                '6': color_p[3], '64': color_p[4],
+                                '103': color_p[5]}  # Colors assigned to Column of Interest
         },
         'GAS': {
             'ORG_SHORT_NAME': 'GAS',
@@ -151,7 +180,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbaaee'
+            'ORG_COLOR': '#bbaaee',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GBS': {
             'ORG_SHORT_NAME': 'GBS',
@@ -160,7 +192,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_13813',
             'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#64b7cc'
+            'ORG_COLOR': '#64b7cc',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GCS': {
             'ORG_SHORT_NAME': 'GCS',
@@ -169,7 +204,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12388',
             'QC_D_STRAIN': 'ATCC_35666',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#eedd88'
+            'ORG_COLOR': '#eedd88',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GDS': {
             'ORG_SHORT_NAME': 'GDS',
@@ -178,7 +216,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_9809',
             'QC_D_STRAIN': 'ATCC_33317',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#f4a261'
+            'ORG_COLOR': '#f4a261',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GGS': {
             'ORG_SHORT_NAME': 'GGS',
@@ -187,7 +228,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12394A',
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbcc33'
+            'ORG_COLOR': '#bbcc33',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'Group_Strep': {
             'ORG_SHORT_NAME': 'GS',
@@ -196,7 +240,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': '',
             'QC_D_STRAIN': '',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#a9dfbf'
+            'ORG_COLOR': '#a9dfbf',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'KO': {
             'ORG_SHORT_NAME': 'KOc',
@@ -205,7 +252,12 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#c24a4a'
+            'ORG_COLOR': '#c24a4a',
+            'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a', 'Klebsiella michiganensis': color_p[8],
+                                'Klebsiella grimontii': color_p[6],
+                                'Klebsiella pasteurii': color_p[7]}  # Colors assigned to Column of Interest
         },
         'KP': {
             'ORG_SHORT_NAME': 'KPc',
@@ -214,7 +266,13 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#44bb99'
+            'ORG_COLOR': '#44bb99',
+            'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99', # Colors assigned to Column of Interest
+                                'Klebsiella variicola subsp. variicola': color_p[8],
+                                'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
+                                'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7]}
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
@@ -223,7 +281,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_27853',
             'QC_D_STRAIN': 'BAA_2795',
             'pipeline_slug': 'pseudomonas-aeruginosa',
-            'ORG_COLOR': '#0173b2'
+            'ORG_COLOR': '#0173b2',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': '',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'SA': {
             'ORG_SHORT_NAME': 'SA',
@@ -232,7 +293,12 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_25923',
             'QC_D_STRAIN': 'ATCC_43300',
             'pipeline_slug': 'staphylococcus-aureus',
-            'ORG_COLOR': '#ee8866'
+            'ORG_COLOR': '#ee8866',
+            'AofI': 'ANTIBIOTIC: Cloxacillin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: cc',  # Column of Interest
+            'Col_of_I_colors': {'CC30': color_p[7], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[3],
+                                'CC15': color_p[4], 'CC97': color_p[5],
+                                'CC1': color_p[6]}  # Colors assigned to Column of Interest
         }
     }
 
