@@ -34,6 +34,7 @@ def package_tree(pkgroot):
 
 
 REQUIRES = [
+    "rpy2",
     "statsmodels",
     "polars",
     "distinctipy",
