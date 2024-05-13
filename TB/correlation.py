@@ -75,10 +75,6 @@ class DiffNetworkAnalysis:
                              on=['Prot1', 'Prot2', 'Prot_pair'], how='outer',
                              suffixes=(f'_{self.label_A}', f'_{self.label_B}'))
 
-        df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}'] = (
-                    df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}_{self.label_A}'] &
-                    df_r_diff[f'hypothesis rejected for alpha = {self.significance_base_level}_{self.label_B}']
-        )
         df_r_diff['Corr_diff'] = df_r_diff[f'r-value_{self.label_A}'] - df_r_diff[f'r-value_{self.label_B}']
 
         df_r_diff['abs_diff'] = df_r_diff['Corr_diff'].abs()
@@ -95,7 +91,7 @@ class DiffNetworkAnalysis:
 
         return df_r_stateA, df_r_stateB, df_r_diff
 
-    def corr_network(self, df: pd.DataFrame, label: str=None, correlation='pearson', replace_zeros=True):
+    def corr_network(self, df: pd.DataFrame, label: str = None, correlation='pearson', replace_zeros=True):
         """
         Generate a correlation network for the given DataFrame.
 
@@ -138,17 +134,17 @@ class DiffNetworkAnalysis:
         df_r = df_r[['Prot1', 'Prot2', 'Prot_pair', 'matching_nonNaN_count', 'r-value']]
 
         # Calculate p-values and use multiple hypothesis correction
-        if correlation == 'accuracy_score':
+        if correlation == 'accuracy_score' or correlation == 'recall_score':
             pvalues = self.derive_pvalues_accuracies(df_r['r-value'], df_r['matching_nonNaN_count'], df)
         else:
-            pvalues = self.derive_pvalues(df_r['r-value'], df_r['matching_nonNaN_count'])
+            pvalues = self.derive_pvalues(df_r['r-value'].to_list(), df_r['matching_nonNaN_count'].to_list(),
+                                          method='fdrtool')
 
-        pvalues_corrected = self.correct_pvalues(pvalues)
+        pvalues_corrected = self.correct_pvalues(pvalues, df_r['matching_nonNaN_count'].to_list(), method='fdrtool')
 
         df_r['r-value_abs'] = df_r['r-value'].abs()
         df_r['p-value'] = pvalues
-        df_r['p-value_corrected'] = pvalues_corrected[1]
-        df_r[f'hypothesis rejected for alpha = {self.significance_base_level}'] = pvalues_corrected[0]
+        df_r['p-value_corrected'] = pvalues_corrected
 
         if label:
             df_r['label'] = label
@@ -207,7 +203,39 @@ class DiffNetworkAnalysis:
         # Return the results as a DataFrame
         return pd.DataFrame(pairwise_non_nan_values, columns=['Prot1', 'Prot2', 'matching_nonNaN_count'])
 
-    def derive_pvalues(self, correlations, n_samples):
+    def fdrtool_pvalues(self, x, n_samples, statistic='correlation'):
+
+        import rpy2.robjects as robjects
+        from rpy2.robjects.vectors import FloatVector
+        from rpy2.robjects.packages import importr
+
+        # Set R's warning level: 0 means "ignore all warnings"
+        robjects.r('options(warn=0)')
+
+        # Check if 'fdrtool' is installed and load it; install if not present
+        robjects.r('''
+                    if (!require(fdrtool)) {
+                        install.packages("fdrtool", repos="http://cran.us.r-project.org")
+                        library(fdrtool)
+                    } else {
+                        library(fdrtool)
+                    }
+                    ''')
+
+        # Import the R "fdrtool" package after ensuring it's loaded
+        fdrtool = importr('fdrtool')
+
+        # Apply fdrtool on the p-values
+        results = fdrtool.fdrtool(FloatVector(x), statistic=statistic, plot=False, verbose=False)
+
+        from rpy2.robjects import r, pandas2ri
+
+        # Activate automatic conversion from R to pandas
+        pandas2ri.activate()
+
+        return list(results.rx2('pval')), list(results.rx2('qval'))
+
+    def derive_pvalues(self, correlations, n_samples, method='betainc_function'):
         """
         Calculate p-values from correlations given the number of samples used to calculate the correlations.
 
@@ -219,29 +247,35 @@ class DiffNetworkAnalysis:
         - pvals: Calculated p-values.
         """
         # Define constants for avoiding magic numbers
-        PERFECT_POSITIVE_CORR_CORRECTION = 0.9999
-        PERFECT_NEGATIVE_CORR_CORRECTION = -0.9999
-        ZERO_CORR_CORRECTION = 0.0001
 
-        pvals = []
-        for correlation, n_sample in zip(correlations, n_samples):
+        if method == 'betainc_function':
+            PERFECT_POSITIVE_CORR_CORRECTION = 0.9999
+            PERFECT_NEGATIVE_CORR_CORRECTION = -0.9999
+            ZERO_CORR_CORRECTION = 0.0001
 
-            if np.isclose(correlation, 1):
-                rf = PERFECT_POSITIVE_CORR_CORRECTION
-            elif np.isclose(correlation, -1):
-                rf = PERFECT_NEGATIVE_CORR_CORRECTION
-            elif np.isclose(correlation, 0):
-                rf = ZERO_CORR_CORRECTION
-            else:
-                rf = correlation
+            pvals = []
+            for correlation, n_sample in zip(correlations, n_samples):
 
-            df = n_sample - 2
-            ts = rf * rf * (df / (1 - rf * rf))
+                if np.isclose(correlation, 1):
+                    rf = PERFECT_POSITIVE_CORR_CORRECTION
+                elif np.isclose(correlation, -1):
+                    rf = PERFECT_NEGATIVE_CORR_CORRECTION
+                elif np.isclose(correlation, 0):
+                    rf = ZERO_CORR_CORRECTION
+                else:
+                    rf = correlation
 
-            pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts)) if df > 2 else 1
-            pvals.append(pval)
+                df = n_sample - 2
+                ts = rf * rf * (df / (1 - rf * rf))
 
-        return pvals
+                pval = scipy.special.betainc(0.5 * df, 0.5, df / (df + ts)) if df > 2 else 1
+                pvals.append(pval)
+
+            return pvals
+        elif method == 'fdrtool':
+            pvals, _ = self.fdrtool_pvalues(correlations, n_samples, statistic='correlation')
+
+            return pvals
 
     def derive_pvalues_accuracies(self, accuracies, n_samples, df: pd.DataFrame):
         """
@@ -269,7 +303,7 @@ class DiffNetworkAnalysis:
 
         return pvals
 
-    def correct_pvalues(self, pvals):
+    def correct_pvalues(self, pvals, n_samples, method='BH'):
         """
         Correct p-values for multiple hypothesis testing.
 
@@ -279,4 +313,13 @@ class DiffNetworkAnalysis:
         Returns:
         - pvals_corrected: Corrected p-values.
         """
-        return multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep', is_sorted=False)
+
+        if method == 'BH':
+            _, pvals_corrected = multitest.fdrcorrection(pvals, alpha=self.significance_base_level, method='indep',
+                                                         is_sorted=False)
+            return pvals_corrected
+
+        elif method == 'fdrtool':
+            _, pvals_corrected = self.fdrtool_pvalues(pvals, n_samples, statistic='pvalue')
+
+            return pvals_corrected
