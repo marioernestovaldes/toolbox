@@ -116,8 +116,8 @@ class DiffNetworkAnalysis:
             from sklearn.model_selection import StratifiedShuffleSplit
 
             # Create the StratifiedShuffleSplit object
-            train_percentage = .8  # Specify the percentage of data to use for training
-            n_splits = 3  # Number of re-shuffling & splitting iterations
+            train_percentage = 0.8  # Specify the percentage of data to use for training
+            n_splits = 5  # Number of re-shuffling & splitting iterations
 
             sss = StratifiedShuffleSplit(n_splits=n_splits, train_size=train_percentage, random_state=42)
 
@@ -126,7 +126,7 @@ class DiffNetworkAnalysis:
 
             dfs_temp_r = []
 
-            print(f"\n'y' variable has been defined and the dataset will be splitted in {n_splits} using StratifiedShuffleSplit...")
+            print(f"\n'y' variable has been defined and the dataset will be splitted in {n_splits} using StratifiedShuffleSplit and a size={train_percentage}...")
             # Generate the splits and print the indices
             for c, (train_index, test_index) in enumerate(sss.split(X, y)):
                 print(f'Dataset no. {c}...')
