@@ -140,7 +140,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#0cb2f0',
+            'ORG_COLOR': '#7391f5',  # '#0cb2f0',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
@@ -153,7 +153,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#0cb2f0',
+            'ORG_COLOR': '#7391f5',  # '#0cb2f0',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
@@ -166,7 +166,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_29212',
             'QC_D_STRAIN': 'ATCC_51299',
             'pipeline_slug': 'enterococcus-faecalis',
-            'ORG_COLOR': '#fc7e97',
+            'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Gentamicin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'179': color_p[0], '40': color_p[1], '16': color_p[2],
@@ -293,10 +293,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_25923',
             'QC_D_STRAIN': 'ATCC_43300',
             'pipeline_slug': 'staphylococcus-aureus',
-            'ORG_COLOR': '#ee8866',
+            'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cloxacillin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: cc',  # Column of Interest
-            'Col_of_I_colors': {'CC30': color_p[7], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[3],
+            'Col_of_I_colors': {'CC30': color_p[7], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[1],
                                 'CC15': color_p[4], 'CC97': color_p[5],
                                 'CC1': color_p[6], '-': 'white'}  # Colors assigned to Column of Interest
         }

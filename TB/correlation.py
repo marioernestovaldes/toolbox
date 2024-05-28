@@ -31,8 +31,8 @@ class DiffNetworkAnalysis:
     """
 
     def __init__(self,
-                 stateA: pd.DataFrame = None, label_A: str = None, stateA_correlation: str = 'pearson',
-                 stateB: pd.DataFrame = None, label_B: str = None, stateB_correlation: str = 'pearson',
+                 stateA: pd.DataFrame = None, y_A: str = None, label_A: str = None, stateA_correlation: str = 'pearson',
+                 stateB: pd.DataFrame = None, y_B: str = None, label_B: str = None, stateB_correlation: str = 'pearson',
                  replace_zeros: bool = True,
                  significance_base_level: float = 0.01):
         """
@@ -43,6 +43,7 @@ class DiffNetworkAnalysis:
         """
         self.stateA, self.stateB = stateA, stateB
         self.label_A, self.label_B = label_A, label_B
+        self.y_A, self.y_B = y_A, y_B
         self.stateA_correlation = stateA_correlation
         self.stateB_correlation = stateB_correlation
         self.replace_zeros = replace_zeros
@@ -63,11 +64,11 @@ class DiffNetworkAnalysis:
         print(f'Processing stateA and stateB dataframes with replace_zeros={self.replace_zeros}')
         print(f"Using {self.stateA_correlation} for {self.label_A}...")
         df_r_stateA = self.corr_network(self.stateA, label=self.label_A, correlation=self.stateA_correlation,
-                                        replace_zeros=self.replace_zeros)
+                                        replace_zeros=self.replace_zeros, y=self.y_A)
 
         print(f"Using {self.stateB_correlation} for {self.label_B}...")
         df_r_stateB = self.corr_network(self.stateB, label=self.label_B, correlation=self.stateB_correlation,
-                                        replace_zeros=self.replace_zeros)
+                                        replace_zeros=self.replace_zeros, y=self.y_B)
 
         print('Generating differential correlation for states A and B...')
 
@@ -91,7 +92,7 @@ class DiffNetworkAnalysis:
 
         return df_r_stateA, df_r_stateB, df_r_diff
 
-    def corr_network(self, df: pd.DataFrame, label: str = None, correlation='pearson', replace_zeros=True):
+    def corr_network(self, df: pd.DataFrame, label: str = None, correlation='pearson', replace_zeros=True, y=None):
         """
         Generate a correlation network for the given DataFrame.
 
@@ -108,7 +109,54 @@ class DiffNetworkAnalysis:
         if replace_zeros and not self.is_dataframe_binary_with_nan(df):
             df = df.replace(0, np.nan)
 
-        df_r = df.corr(method=correlation).astype(float)
+        if y is not None:
+            index_dict = dict(zip(list(range(len(df.index))), df.index))
+            cols_dict = dict(zip(list(range(len(df.columns))), df.columns))
+
+            from sklearn.model_selection import StratifiedShuffleSplit
+
+            # Create the StratifiedShuffleSplit object
+            train_percentage = .8  # Specify the percentage of data to use for training
+            n_splits = 3  # Number of re-shuffling & splitting iterations
+
+            sss = StratifiedShuffleSplit(n_splits=n_splits, train_size=train_percentage, random_state=42)
+
+            X = df.values
+            y = y
+
+            dfs_temp_r = []
+
+            print(f"\n'y' variable has been defined and the dataset will be splitted in {n_splits} using StratifiedShuffleSplit...")
+            # Generate the splits and print the indices
+            for c, (train_index, test_index) in enumerate(sss.split(X, y)):
+                print(f'Dataset no. {c}...')
+                # print("TRAIN:", train_index, "TEST:", test_index)
+                X_train, X_test = X[train_index], X[test_index]
+                y_train, y_test = y[train_index], y[test_index]
+                # Train and evaluate your model here
+                # print(f"Training set size: {len(train_index)}, Test set size: {len(test_index)}")
+
+                df_temp = pd.DataFrame(X[train_index, :],
+                                       index=[index_dict[i] for i in train_index])
+                df_temp.columns = [cols_dict[c] for c in df_temp.columns]
+
+                df_temp_r = df_temp.corr(method=correlation).astype(float)
+
+                dfs_temp_r.append(df_temp_r)
+
+            # Concatenate DataFrames along a new axis (axis=0 stacks them vertically)
+            concat_df = pd.concat(dfs_temp_r, keys=range(len(dfs_temp_r)), names=['df', 'index'])
+
+            # Calculate the median for each cell across DataFrames
+            df_r = concat_df.groupby(level='index').median()
+
+            df_r.index.name, df_r.columns.name = None, None
+
+            # Calculate the standard deviation for each cell across DataFrames
+            std_df = concat_df.groupby(level='index').std()
+
+        else:
+            df_r = df.corr(method=correlation).astype(float)
 
         # Set the upper triangle of the symmetric dataframe to NaN
         upper_triangle_indices = np.triu_indices(n=df_r.shape[0], k=0)  # Get the indices for the upper triangle
