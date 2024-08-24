@@ -17,7 +17,7 @@ def get_plate(x, organism):
     if organism in ['SA', 'KP', 'KO', 'EC', 'PA']:
         # For organisms with 2-letter codes, the plate identifier is the first 5 characters of the sample identifier.
         return x[:5]
-    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS', 'CNS']:
+    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS', 'CNS', 'Group_Strep']:
         # For organisms with 3-letter codes, the plate identifier is the first 6 characters of the sample identifier.
         return x[:6]
     elif organism in ['FAES', 'FAEM', 'FAEM_MS3']:
@@ -104,7 +104,7 @@ def get_org_info(organism):
     # Dictionary containing information about different organisms
 
     color_p = ['#77aadd', '#ee8866', '#eedd88', '#ff4d6d', '#33bbee', '#44bb99', '#bbcc33',
-               '#ffb3c1', '#ffba08', '#882255', '#dddddd', '#c9184a', '#aa4499']
+               '#ffb3c1', '#ffba08', '#882255', '#dddddd', '#c9184a', '#aa4499', '#bbaaee']
 
     ORGS = {
         'CNS': {
@@ -169,7 +169,7 @@ def get_org_info(organism):
             'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Gentamicin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {'179': color_p[0], '40': color_p[1], '16': color_p[2],
+            'Col_of_I_colors': {'179': color_p[0], '40': '#cc78bc', '16': color_p[2],
                                 '6': color_p[3], '64': color_p[4],
                                 '103': color_p[5], '-': 'white'}  # Colors assigned to Column of Interest
         },
@@ -296,9 +296,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cloxacillin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: cc',  # Column of Interest
-            'Col_of_I_colors': {'CC30': color_p[7], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[1],
+            'Col_of_I_colors': {'CC30': color_p[13], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[1],
                                 'CC15': color_p[4], 'CC97': color_p[5],
-                                'CC1': color_p[6], '-': 'white'}  # Colors assigned to Column of Interest
+                                'CC1': color_p[6], '-': 'white', 'CC22': color_p[7]}  # Colors assigned to Column of Interest
         }
     }
 

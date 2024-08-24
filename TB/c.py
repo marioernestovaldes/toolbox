@@ -21,6 +21,11 @@ from matplotlib import pylab, mlab
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 
+new_rc_params = {'text.usetex': False,
+"svg.fonttype": 'none'
+}
+mpl.rcParams.update(new_rc_params)
+
 # Importing utilities for data visualization
 from IPython.core.pylabtools import figsize, getfigs
 
