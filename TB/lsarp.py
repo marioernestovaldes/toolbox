@@ -166,7 +166,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_29212',
             'QC_D_STRAIN': 'ATCC_51299',
             'pipeline_slug': 'enterococcus-faecalis',
-            'ORG_COLOR': '#f07167',
+            'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Gentamicin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'179': color_p[0], '40': '#cc78bc', '16': color_p[2],
