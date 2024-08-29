@@ -242,8 +242,9 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
-            'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {"Stre pyogenes": "#a0e7e5", "Stre agalactiae": "#ffd166",
+                                "Stre dysgalactiae": "#ffaaa5"}  # Colors assigned to Column of Interest
         },
         'KO': {
             'ORG_SHORT_NAME': 'KOc',
