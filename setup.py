@@ -34,9 +34,10 @@ def package_tree(pkgroot):
 
 
 REQUIRES = [
+    "numpy==1.26.3",
     "rpy2",
     "statsmodels",
-    "polars",
+    "polars==0.20.31",
     "distinctipy",
     "tqdm",
     "seaborn",

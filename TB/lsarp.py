@@ -242,8 +242,48 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
-            'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
+                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+        },
+        'Spyo': {
+            'ORG_SHORT_NAME': 'Spyo',
+            'ORG_MID_NAME': 'S. pyogenes',
+            'ORG_LONG_NAME': 'Streptococcus pyogenes',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#a9dfbf',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
+                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+        },
+        'Saga': {
+            'ORG_SHORT_NAME': 'Saga',
+            'ORG_MID_NAME': 'S. agalactiae',
+            'ORG_LONG_NAME': 'Streptococcus agalactiae',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#a9dfbf',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
+                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+        },
+        'Sdys': {
+            'ORG_SHORT_NAME': 'Sdys',
+            'ORG_MID_NAME': 'S. dysgalactiae',
+            'ORG_LONG_NAME': 'Streptococcus dysgalactiae',
+            'QC_A_STRAIN': '',
+            'QC_D_STRAIN': '',
+            'pipeline_slug': 'group-streptococcus',
+            'ORG_COLOR': '#a9dfbf',
+            'AofI': '',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
+                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
         },
         'KO': {
             'ORG_SHORT_NAME': 'KOc',
@@ -255,9 +295,55 @@ def get_org_info(organism):
             'ORG_COLOR': '#c24a4a',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a', 'Klebsiella michiganensis': color_p[8],
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
+                                'Klebsiella michiganensis': color_p[8],
                                 'Klebsiella grimontii': color_p[6],
-                                'Klebsiella pasteurii': color_p[7], '-': 'white'}  # Colors assigned to Column of Interest
+                                '-': 'white'}  # Colors assigned to Column of Interest
+        },
+        'Koxy': {
+            'ORG_SHORT_NAME': 'Koxy',
+            'ORG_MID_NAME': 'K. oxytoca',
+            'ORG_LONG_NAME': 'Klebsiella oxytoca',
+            'QC_A_STRAIN': 'ATCC_700324',
+            'QC_D_STRAIN': 'ATCC_51983',
+            'pipeline_slug': 'klebsiella-oxytoca',
+            'ORG_COLOR': '#c24a4a',
+            'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
+                                'Klebsiella michiganensis': color_p[8],
+                                'Klebsiella grimontii': color_p[6],
+                                '-': 'white'}  # Colors assigned to Column of Interest
+        },
+        'Kmich': {
+            'ORG_SHORT_NAME': 'Koxy',
+            'ORG_MID_NAME': 'K. michiganensis',
+            'ORG_LONG_NAME': 'Klebsiella michiganensis',
+            'QC_A_STRAIN': 'ATCC_700324',
+            'QC_D_STRAIN': 'ATCC_51983',
+            'pipeline_slug': 'klebsiella-oxytoca',
+            'ORG_COLOR': '#c24a4a',
+            'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
+                                'Klebsiella michiganensis': color_p[8],
+                                'Klebsiella grimontii': color_p[6],
+                                '-': 'white'}  # Colors assigned to Column of Interest
+        },
+        'Kgri': {
+            'ORG_SHORT_NAME': 'Koxy',
+            'ORG_MID_NAME': 'K. grimontii',
+            'ORG_LONG_NAME': 'Klebsiella grimontii',
+            'QC_A_STRAIN': 'ATCC_700324',
+            'QC_D_STRAIN': 'ATCC_51983',
+            'pipeline_slug': 'klebsiella-oxytoca',
+            'ORG_COLOR': '#c24a4a',
+            'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
+                                'Klebsiella michiganensis': color_p[8],
+                                'Klebsiella grimontii': color_p[6],
+                                '-': 'white'}  # Colors assigned to Column of Interest
         },
         'KP': {
             'ORG_SHORT_NAME': 'KPc',
@@ -271,8 +357,41 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99', # Colors assigned to Column of Interest
                                 'Klebsiella variicola subsp. variicola': color_p[8],
-                                'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
-                                'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7], '-': 'white'}
+                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
+                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
+                                '-': 'white'}
+        },
+        'Kpneu': {
+            'ORG_SHORT_NAME': 'KPc',
+            'ORG_MID_NAME': 'K. pneumoniae',
+            'ORG_LONG_NAME': 'Klebsiella pneumoniae',
+            'QC_A_STRAIN': 'ATCC_700603',
+            'QC_D_STRAIN': 'ATCC_BAA1705',
+            'pipeline_slug': 'klebsiella-pneumoniae',
+            'ORG_COLOR': '#44bb99',
+            'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
+                                'Klebsiella variicola subsp. variicola': color_p[8],
+                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
+                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
+                                '-': 'white'}
+        },
+        'Kvari': {
+            'ORG_SHORT_NAME': 'KPc',
+            'ORG_MID_NAME': 'K. variicola',
+            'ORG_LONG_NAME': 'Klebsiella variicola',
+            'QC_A_STRAIN': 'ATCC_700603',
+            'QC_D_STRAIN': 'ATCC_BAA1705',
+            'pipeline_slug': 'klebsiella-pneumoniae',
+            'ORG_COLOR': '#44bb99',
+            'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
+            'Col_of_I': 'GENO: species',  # Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
+                                'Klebsiella variicola subsp. variicola': color_p[8],
+                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
+                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
+                                '-': 'white'}
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
