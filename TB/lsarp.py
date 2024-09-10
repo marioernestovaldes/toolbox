@@ -250,8 +250,8 @@ def get_org_info(organism):
             'ORG_SHORT_NAME': 'Spyo',
             'ORG_MID_NAME': 'S. pyogenes',
             'ORG_LONG_NAME': 'Streptococcus pyogenes',
-            'QC_A_STRAIN': '',
-            'QC_D_STRAIN': '',
+            'QC_A_STRAIN': 'ATCC_19615',
+            'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
@@ -263,8 +263,8 @@ def get_org_info(organism):
             'ORG_SHORT_NAME': 'Saga',
             'ORG_MID_NAME': 'S. agalactiae',
             'ORG_LONG_NAME': 'Streptococcus agalactiae',
-            'QC_A_STRAIN': '',
-            'QC_D_STRAIN': '',
+            'QC_A_STRAIN': 'ATCC_13813',
+            'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
@@ -276,8 +276,8 @@ def get_org_info(organism):
             'ORG_SHORT_NAME': 'Sdys',
             'ORG_MID_NAME': 'S. dysgalactiae',
             'ORG_LONG_NAME': 'Streptococcus dysgalactiae',
-            'QC_A_STRAIN': '',
-            'QC_D_STRAIN': '',
+            'QC_A_STRAIN': 'ATCC_12394A',
+            'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
