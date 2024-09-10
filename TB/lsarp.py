@@ -14,10 +14,10 @@ def get_plate(x, organism):
         str: The plate identifier.
     """
     # Check the organism to determine the plate identifier length
-    if organism in ['SA', 'KP', 'KO', 'EC', 'PA']:
+    if organism in ['SA', 'KP', 'Kpneu', 'Kvari', 'KO', 'Koxy', 'Kmich', 'Kgri', 'EC', 'PA']:
         # For organisms with 2-letter codes, the plate identifier is the first 5 characters of the sample identifier.
         return x[:5]
-    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS', 'CNS', 'Group_Strep']:
+    elif organism in ['GAS', 'GBS', 'GCS', 'GDS', 'GGS', 'CNS', 'Group_Strep', 'Saga', 'Sdys', 'Spyo']:
         # For organisms with 3-letter codes, the plate identifier is the first 6 characters of the sample identifier.
         return x[:6]
     elif organism in ['FAES', 'FAEM', 'FAEM_MS3']:
