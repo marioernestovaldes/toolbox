@@ -253,7 +253,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#a9dfbf',
+            'ORG_COLOR': '#bbaaee',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
@@ -279,7 +279,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12394A',
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#a9dfbf',
+            'ORG_COLOR': '#bbcc33',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
@@ -307,7 +307,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#c24a4a',
+            'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
@@ -322,7 +322,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#c24a4a',
+            'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
@@ -337,7 +337,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#c24a4a',
+            'ORG_COLOR': '#bbaaee',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
@@ -368,7 +368,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#44bb99',
+            'ORG_COLOR': '#a9dfbf',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
@@ -384,7 +384,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#44bb99',
+            'ORG_COLOR': '#bbcc33',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
