@@ -53,6 +53,8 @@ def remove_outliers(df: pd.DataFrame):
     from collections import Counter
     from sklearn.ensemble import IsolationForest
 
+    df['count'] = df.count(axis=1)
+
     iso_forest = IsolationForest(n_estimators=300, random_state=42)
 
     outliers_count = iso_forest.fit_predict(df.applymap(lambda x: 1 if not pd.isnull(x) else 0))
@@ -74,7 +76,7 @@ def remove_outliers(df: pd.DataFrame):
     print(f'Kepping {Counter(outliers_expression)[1]} samples...')
     print(f'Removing {Counter(outliers_expression)[-1]} samples...')
 
-    df = df.loc[[i for i in df.index if dict_outliers_expression[i] == 1], :]
+    df = df.loc[[i for i in df.index if dict_outliers_expression[i] == 1], :].drop('count', axis=1)
 
     return df
 
