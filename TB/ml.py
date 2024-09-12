@@ -55,8 +55,8 @@ def remove_outliers(df: pd.DataFrame):
     from scipy.stats import zscore
 
     df['count'] = df.count(axis=1)
-    # Calculate the z-score for the quantification count feature
-    df['count'] = zscore(df['count'])
+    # # Calculate the z-score for the quantification count feature
+    # df['count'] = zscore(df['count'])
 
     iso_forest = IsolationForest(n_estimators=300, random_state=42)
 
