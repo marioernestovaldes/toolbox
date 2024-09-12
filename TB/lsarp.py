@@ -308,7 +308,7 @@ def get_org_info(organism):
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#fc7e97',
-            'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
+            'AofI': 'ANTIBIOTIC: Amoxicillin-clavulanate',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
                                 'Klebsiella michiganensis': color_p[8],
