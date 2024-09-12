@@ -55,21 +55,19 @@ def remove_outliers(df: pd.DataFrame):
     from scipy.stats import zscore
 
     df['count'] = df.count(axis=1)
-    # # Calculate the z-score for the quantification count feature
-    # df['count'] = zscore(df['count'])
 
     iso_forest = IsolationForest(n_estimators=300, random_state=42)
 
-    # outliers_count = iso_forest.fit_predict(df.applymap(lambda x: 1 if not pd.isnull(x) else 0))
-    #
-    # dict_outliers_count = dict(zip(df.index, outliers_count))
-    #
-    # print('Outlier removal based on protein count...')
-    # print(f'Kepping {Counter(outliers_count)[1]} samples...')
-    # print(f'Removing {Counter(outliers_count)[-1]} samples...')
-    # print('')
-    #
-    # df = df.loc[[i for i in df.index if dict_outliers_count[i] == 1], :]
+    outliers_count = iso_forest.fit_predict(df.applymap(lambda x: 1 if not pd.isnull(x) else 0))
+
+    dict_outliers_count = dict(zip(df.index, outliers_count))
+
+    print('Outlier removal based on protein count...')
+    print(f'Kepping {Counter(outliers_count)[1]} samples...')
+    print(f'Removing {Counter(outliers_count)[-1]} samples...')
+    print('')
+
+    df = df.loc[[i for i in df.index if dict_outliers_count[i] == 1], :]
 
     outliers_expression = iso_forest.fit_predict(df.replace(np.nan, 0))
 
