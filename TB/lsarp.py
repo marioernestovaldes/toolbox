@@ -192,7 +192,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_13813',
             'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#64b7cc',
+            'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': '',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
