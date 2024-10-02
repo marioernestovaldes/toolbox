@@ -182,7 +182,7 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#bbaaee',
             'AofI': '',  # Antibiotic of Interest
-            'Col_of_I': '',  # Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GBS': {
@@ -194,7 +194,7 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
             'AofI': '',  # Antibiotic of Interest
-            'Col_of_I': '',  # Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'GCS': {
@@ -230,7 +230,7 @@ def get_org_info(organism):
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#bbcc33',
             'AofI': '',  # Antibiotic of Interest
-            'Col_of_I': '',  # Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'Group_Strep': {
@@ -309,11 +309,8 @@ def get_org_info(organism):
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Amoxicillin-clavulanate',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
-            'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
-                                'Klebsiella michiganensis': color_p[8],
-                                'Klebsiella grimontii': color_p[6],
-                                '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'Kmich': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -324,11 +321,8 @@ def get_org_info(organism):
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
-            'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
-                                'Klebsiella michiganensis': color_p[8],
-                                'Klebsiella grimontii': color_p[6],
-                                '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'Kgri': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -339,11 +333,8 @@ def get_org_info(organism):
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#bbaaee',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
-            'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
-                                'Klebsiella michiganensis': color_p[8],
-                                'Klebsiella grimontii': color_p[6],
-                                '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
         'KP': {
             'ORG_SHORT_NAME': 'KPc',
@@ -370,12 +361,8 @@ def get_org_info(organism):
             'pipeline_slug': 'klebsiella-pneumoniae',
             'ORG_COLOR': '#a9dfbf',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
-            'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
-                                'Klebsiella variicola subsp. variicola': color_p[8],
-                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
-                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
-                                '-': 'white'}
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {}
         },
         'Kvari': {
             'ORG_SHORT_NAME': 'KPc',
@@ -386,12 +373,8 @@ def get_org_info(organism):
             'pipeline_slug': 'klebsiella-pneumoniae',
             'ORG_COLOR': '#bbcc33',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
-            'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99',  # Colors assigned to Column of Interest
-                                'Klebsiella variicola subsp. variicola': color_p[8],
-                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
-                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
-                                '-': 'white'}
+            'Col_of_I': 'GENO: mlst',  # Column of Interest
+            'Col_of_I_colors': {}
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
