@@ -181,7 +181,7 @@ def get_org_info(organism):
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#bbaaee',
-            'AofI': '',  # Antibiotic of Interest
+            'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
@@ -193,7 +193,7 @@ def get_org_info(organism):
             'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#a9dfbf',
-            'AofI': '',  # Antibiotic of Interest
+            'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
@@ -229,7 +229,7 @@ def get_org_info(organism):
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
             'ORG_COLOR': '#bbcc33',
-            'AofI': '',  # Antibiotic of Interest
+            'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
@@ -308,7 +308,7 @@ def get_org_info(organism):
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
             'ORG_COLOR': '#fc7e97',
-            'AofI': 'ANTIBIOTIC: Amoxicillin-clavulanate',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
+            'AofI': 'ANTIBIOTIC: Cefazolin',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {}  # Colors assigned to Column of Interest
         },
