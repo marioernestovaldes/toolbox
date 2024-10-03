@@ -76,11 +76,7 @@ def get_date(x):
 
     # Attempt to find a date pattern using a regex pattern
     res = re.findall("[0-9]{6}", x)
-    if len(res) == 1:
-        return res[0]
-
-    # Return None if no date pattern is found
-    return None
+    return res[0] if len(res) == 1 else None
 
 
 def get_org_info(organism):
