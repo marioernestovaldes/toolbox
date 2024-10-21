@@ -99,8 +99,8 @@ def get_org_info(organism):
 
     # Dictionary containing information about different organisms
 
-    color_p = ['#77aadd', '#ee8866', '#eedd88', '#ff4d6d', '#33bbee', '#44bb99', '#bbcc33',
-               '#ffb3c1', '#ffba08', '#882255', '#dddddd', '#c9184a', '#aa4499', '#bbaaee']
+    colors = ['#77aadd', '#ee8866', '#eedd88', '#ff4d6d', '#33bbee', '#44bb99', '#bbcc33',
+              '#ffb3c1', '#ffba08', '#882255', '#dddddd', '#c9184a', '#bbaaee']
 
     ORGS = {
         'CNS': {
@@ -113,7 +113,7 @@ def get_org_info(organism):
             'ORG_COLOR': '#7391f5',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'EC': {
             'ORG_SHORT_NAME': 'EC',
@@ -125,9 +125,10 @@ def get_org_info(organism):
             'ORG_COLOR': '#7391f5',
             'AofI': 'ANTIBIOTIC: Ampicillin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: cc',  # Column of Interest
-            'Col_of_I_colors': {'ST131 Cplx': color_p[7], 'ST95 Cplx': color_p[8], 'ST73 Cplx': color_p[2],
-                                'ST69 Cplx': color_p[3], 'ST14 Cplx': color_p[4], 'ST12 Cplx': color_p[5],
-                                'ST10 Cplx': color_p[6], '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'ST131 Cplx': colors[7], 'ST95 Cplx': colors[8],
+                                'ST73 Cplx': colors[2], 'ST69 Cplx': colors[1],
+                                'ST14 Cplx': colors[4], 'ST12 Cplx': colors[5],
+                                'ST10 Cplx': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'FAEM': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -139,8 +140,8 @@ def get_org_info(organism):
             'ORG_COLOR': '#7391f5',  # '#0cb2f0',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
-            'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
-                                'B': color_p[5], '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
+                                'B': colors[5], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'FAEM_MS3': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -152,8 +153,8 @@ def get_org_info(organism):
             'ORG_COLOR': '#7391f5',  # '#0cb2f0',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
-            'Col_of_I_colors': {'A1': color_p[7], 'A2': color_p[2],
-                                'B': color_p[5], '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
+                                'B': colors[5], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'FAES': {
             'ORG_SHORT_NAME': 'FAES',
@@ -165,9 +166,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Gentamicin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {'179': color_p[0], '40': '#cc78bc', '16': color_p[2],
-                                '6': color_p[3], '64': color_p[4],
-                                '103': color_p[5], '-': 'white'}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'179': colors[0], '40': colors[1], '16': colors[2],
+                                '6': colors[3], '64': colors[4], '103': colors[5],
+                                '778': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'GAS': {
             'ORG_SHORT_NAME': 'GAS',
@@ -179,7 +180,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#bbaaee',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'28': colors[0], '172': colors[1], '120': colors[2],
+                                '52': colors[3], '433': colors[4], '36': colors[5],
+                                '15': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'GBS': {
             'ORG_SHORT_NAME': 'GBS',
@@ -191,7 +194,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#a9dfbf',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'1': colors[0], '23': colors[1], '17': colors[2],
+                                '8': colors[3], '19': colors[4], '12': colors[5],
+                                '459': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'GCS': {
             'ORG_SHORT_NAME': 'GCS',
@@ -203,7 +208,7 @@ def get_org_info(organism):
             'ORG_COLOR': '#eedd88',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'GDS': {
             'ORG_SHORT_NAME': 'GDS',
@@ -215,7 +220,7 @@ def get_org_info(organism):
             'ORG_COLOR': '#f4a261',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'GGS': {
             'ORG_SHORT_NAME': 'GGS',
@@ -227,7 +232,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#bbcc33',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'17': colors[0], '29': colors[1], '12': colors[2],
+                                '15': colors[3], '8': colors[4], '282': colors[5],
+                                '63': colors[12], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Group_Strep': {
             'ORG_SHORT_NAME': 'GS',
@@ -253,7 +260,7 @@ def get_org_info(organism):
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
-                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+                                'Stre pyogenes': '#bbaaee', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Saga': {
             'ORG_SHORT_NAME': 'Saga',
@@ -266,7 +273,7 @@ def get_org_info(organism):
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
-                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+                                'Stre pyogenes': '#bbaaee', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Sdys': {
             'ORG_SHORT_NAME': 'Sdys',
@@ -279,7 +286,7 @@ def get_org_info(organism):
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
-                                'Stre pyogenes': '#bbaaee'}  # Colors assigned to Column of Interest
+                                'Stre pyogenes': '#bbaaee', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'KO': {
             'ORG_SHORT_NAME': 'KOc',
@@ -292,9 +299,9 @@ def get_org_info(organism):
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella oxytoca': '#c24a4a',
-                                'Klebsiella michiganensis': color_p[8],
-                                'Klebsiella grimontii': color_p[6],
-                                '-': 'white'}  # Colors assigned to Column of Interest
+                                'Klebsiella michiganensis': colors[8],
+                                'Klebsiella grimontii': colors[6],
+                                '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Koxy': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -306,7 +313,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'199': colors[12], '176': colors[8], '223': colors[2],
+                                '21': colors[1], '37': colors[4], '53': colors[5],
+                                '58': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Kmich': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -318,7 +327,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#ee8866',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'27': colors[7], '11': colors[8], '29': colors[2],
+                                '44': colors[12], '85': colors[4], '213': colors[5],
+                                '50': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Kgri': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -330,7 +341,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#bbaaee',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'216': colors[7], '186': colors[8], '431': colors[2],
+                                '184': colors[1], '215': colors[4], '168': colors[5],
+                                '214': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'KP': {
             'ORG_SHORT_NAME': 'KPc',
@@ -343,10 +356,10 @@ def get_org_info(organism):
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Klebsiella pneumoniae': '#44bb99', # Colors assigned to Column of Interest
-                                'Klebsiella variicola subsp. variicola': color_p[8],
-                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': color_p[6],
-                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': color_p[7],
-                                '-': 'white'}
+                                'Klebsiella variicola subsp. variicola': colors[8],
+                                # 'Klebsiella quasipneumoniae subsp. similipneumoniae': colors[6],
+                                # 'Klebsiella quasipneumoniae subsp. quasipneumoniae': colors[7],
+                                '-': 'whitesmoke'}
         },
         'Kpneu': {
             'ORG_SHORT_NAME': 'KPc',
@@ -358,7 +371,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#a9dfbf',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}
+            'Col_of_I_colors': {'23': colors[7], '20': colors[8], '37': colors[2],
+                                '253': colors[1], '17': colors[4], '45': colors[5],
+                                '36': colors[6], '-': 'whitesmoke'}
         },
         'Kvari': {
             'ORG_SHORT_NAME': 'KPc',
@@ -370,7 +385,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#bbcc33',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
-            'Col_of_I_colors': {}
+            'Col_of_I_colors': {'347': colors[7], '2011': colors[8], '1562': colors[2],
+                                '208': colors[1], '919': colors[4], '355': colors[5],
+                                '641': colors[6], '-': 'whitesmoke'}
         },
         'PA': {
             'ORG_SHORT_NAME': 'PA',
@@ -382,7 +399,7 @@ def get_org_info(organism):
             'ORG_COLOR': '#0173b2',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': '',  # Column of Interest
-            'Col_of_I_colors': {}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'SA': {
             'ORG_SHORT_NAME': 'SA',
@@ -394,9 +411,9 @@ def get_org_info(organism):
             'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cloxacillin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: cc',  # Column of Interest
-            'Col_of_I_colors': {'CC30': color_p[13], 'CC5': color_p[8], 'CC8': color_p[2], 'CC45': color_p[1],
-                                'CC15': color_p[4], 'CC97': color_p[5],
-                                'CC1': color_p[6], '-': 'white', 'CC22': color_p[7]}  # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'CC30': colors[12], 'CC5': colors[8], 'CC8': colors[2],
+                                'CC45': colors[1], 'CC15': colors[4], 'CC97': colors[5],
+                                'CC1': colors[6], '-': 'whitesmoke', 'CC22': colors[7]}
         }
     }
 
