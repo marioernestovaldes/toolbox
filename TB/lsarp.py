@@ -295,12 +295,13 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#c24a4a',
+            'ORG_COLOR': '#fc7e97',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#fc7e97',
-                                'Klebsiella michiganensis': '#ee8866',
-                                'Klebsiella grimontii': '#bbaaee',
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#a9dfbf',
+                                'Klebsiella michiganensis': '#ff4d6d',
+                                'Klebsiella grimontii': '#66ccee',
+                                'Klebsiella pasteurii': '#eedd88',
                                 '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Koxy': {
@@ -355,10 +356,10 @@ def get_org_info(organism):
             'ORG_COLOR': '#44bb99',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella pneumoniae': '#a9dfbf', # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#fc7e97', # Colors assigned to Column of Interest
                                 'Klebsiella variicola subsp. variicola': '#bbcc33',
-                                'Klebsiella quasipneumoniae subsp. similipneumoniae': colors[6],
-                                'Klebsiella quasipneumoniae subsp. quasipneumoniae': colors[7],
+                                'Klebsiella quasipneumoniae subsp. similipneumoniae': '#eedd88',
+                                'Klebsiella quasipneumoniae subsp. quasipneumoniae': '#77aadd',
                                 '-': 'whitesmoke'}
         },
         'Kpneu': {
