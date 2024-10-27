@@ -295,11 +295,11 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#66ccee',
+            'ORG_COLOR': '#bbaaee',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#66ccee',
-                                'Klebsiella michiganensis': '#ff4d6d',
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#bbaaee',
+                                'Klebsiella michiganensis': '#ffb5c2',
                                 'Klebsiella grimontii': '#a9dfbf',
                                 'Klebsiella pasteurii': '#eedd88',
                                 '-': 'whitesmoke'}  # Colors assigned to Column of Interest
