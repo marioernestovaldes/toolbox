@@ -301,7 +301,7 @@ def get_org_info(organism):
             'Col_of_I_colors': {'Klebsiella oxytoca': '#bbaaee',
                                 'Klebsiella michiganensis': '#ffb5c2',
                                 'Klebsiella grimontii': '#a9dfbf',
-                                'Klebsiella pasteurii': '#eedd88',
+                                # 'Klebsiella pasteurii': '#eedd88',
                                 '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'Koxy': {
