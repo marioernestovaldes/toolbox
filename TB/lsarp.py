@@ -414,7 +414,9 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: cc',  # Column of Interest
             'Col_of_I_colors': {'CC30': colors[12], 'CC5': colors[8], 'CC8': colors[2],
                                 'CC45': colors[1], 'CC15': colors[4], 'CC97': colors[5],
-                                'CC1': colors[6], '-': 'whitesmoke', 'CC22': colors[7]}
+                                'CC1': colors[6], '-': 'whitesmoke'
+                                # 'CC22': colors[7]
+                                }
         }
     }
 
