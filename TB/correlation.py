@@ -170,7 +170,8 @@ class DiffNetworkAnalysis:
             .rename(columns={'level_0': 'Prot1', 'level_1': 'Prot2', 0: 'r-value'})
         )
 
-        df_r['Prot_pair'] = df_r['Prot1'] + '-' + df_r['Prot2']
+        # here we use double-dash just in case some names contain dash
+        df_r['Prot_pair'] = df_r['Prot1'] + '--' + df_r['Prot2']
 
         # Create a DataFrame with the matching_nonNaN_count per protein pair
         n_samples_df = self.pairwise_non_nan_values(df)
