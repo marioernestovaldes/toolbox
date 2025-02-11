@@ -142,6 +142,11 @@ class DiffNetworkAnalysis:
 
                 df_temp_r = df_temp.corr(method=correlation).astype(float)
 
+                # Find index/columns without NaNs
+                without_nan = df_temp_r.columns[~df_temp_r.isna().any()].tolist()
+
+                df_temp_r = df_temp_r.loc[without_nan, without_nan]
+
                 dfs_temp_r.append(df_temp_r)
 
             # Concatenate DataFrames along a new axis (axis=0 stacks them vertically)
@@ -157,6 +162,11 @@ class DiffNetworkAnalysis:
 
         else:
             df_r = df.corr(method=correlation).astype(float)
+
+            # Find index/columns without NaNs
+            without_nan = df_r.columns[~df_r.isna().any()].tolist()
+
+            df_r = df_r.loc[without_nan, without_nan]
 
         # Set the upper triangle of the symmetric dataframe to NaN
         upper_triangle_indices = np.triu_indices(n=df_r.shape[0], k=0)  # Get the indices for the upper triangle
