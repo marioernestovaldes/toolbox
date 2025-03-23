@@ -309,6 +309,16 @@ def get_org_info(organism):
             'Col_of_I_colors': {'Klebsiella oxytoca': '#bbaaee',
                                 'Klebsiella michiganensis': '#ffb5c2',
                                 'Klebsiella grimontii': '#a9dfbf',
+
+                                # https://pmc.ncbi.nlm.nih.gov/articles/PMC8635272/
+                                # K. pasteurii represents the phylogroup Ko4. Strain SPARK_836_C1T, a representative
+                                # Ko4 strain, had the highest ANI value, 95.5%, with K. grimontii 06D021T, which falls
+                                # into the 95% to 96% inconclusive zone of defining a bacterial species
+
+                                # We performed an analysis and found that the isDDH between
+                                # K.pasteurii SPARK_836_C1T and K.grimontii 06D021T was 67.8 %, below the
+                                # 70 % cutoff(23).The species status of K.pasteurii is therefore confirmed.
+
                                 # 'Klebsiella pasteurii': '#eedd88',
                                 '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
