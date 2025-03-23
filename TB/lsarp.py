@@ -128,7 +128,9 @@ def get_org_info(organism):
             'Col_of_I_colors': {'ST131 Cplx': colors[7], 'ST95 Cplx': colors[8],
                                 'ST73 Cplx': colors[2], 'ST69 Cplx': colors[1],
                                 'ST14 Cplx': colors[4], 'ST12 Cplx': colors[5],
-                                'ST10 Cplx': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                'ST10 Cplx': colors[6], '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'adk': 'adk', 'fumC': 'fumC', 'gyrB': 'gyrB', 'icd': 'icd_2',
+                     'mdh': 'mdh_1', 'purA': 'purA', 'recA': 'recA'}
         },
         'FAEM': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -168,7 +170,9 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'179': colors[0], '40': colors[1], '16': colors[2],
                                 '6': colors[3], '64': colors[4], '103': colors[5],
-                                '778': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                '778': colors[6], '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            MLST: {'aroE': 'aroE', 'gdh': 'zwf', 'gki': 'glcK', 'gyd': 'gap_2',
+                   'pstS': 'pstS1_1', 'xpt': 'xpt', 'yqiL': 'fadA'}
         },
         'GAS': {
             'ORG_SHORT_NAME': 'GAS',
@@ -182,7 +186,9 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'28': colors[0], '172': colors[1], '120': colors[2],
                                 '52': colors[3], '433': colors[4], '36': colors[5],
-                                '15': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                '15': colors[6], '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            MLST: {'gki': 'glcK', 'gtr': 'glnQ_2', 'murI': 'murI', 'mutS': 'mutS',
+                   'recP': 'tkt', 'xpt': 'xpt', 'yqiL': 'thlA_2'}
         },
         'GBS': {
             'ORG_SHORT_NAME': 'GBS',
@@ -196,7 +202,9 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'1': colors[0], '23': colors[1], '17': colors[2],
                                 '8': colors[3], '19': colors[4], '12': colors[5],
-                                '459': colors[6], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                '459': colors[6], '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            MLST: {'adhP': 'adhA', 'atr': 'group_882', 'glcK': 'glcK', 'glnA': 'glnA',
+                   'pheS': 'pheS', 'sdhA': 'sdhA', 'tkt': 'tkt'}
         },
         'GCS': {
             'ORG_SHORT_NAME': 'GCS',
@@ -416,7 +424,9 @@ def get_org_info(organism):
                                 'CC45': colors[1], 'CC15': colors[4], 'CC97': colors[5],
                                 'CC1': colors[6], '-': 'whitesmoke'
                                 # 'CC22': colors[7]
-                                }
+                                },
+            'MSLT': {'arcC': 'arcC2', 'aroE': 'aroE', 'glpF': 'glpF', 'gmk': 'gmk',
+                     'pta': 'pta', 'tpi': 'tpiA', 'yqiL': 'group_4471'}
         }
     }
 
