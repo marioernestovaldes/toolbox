@@ -188,7 +188,7 @@ class DiffNetworkAnalysis:
 
         df_r = pd.merge(n_samples_df, df_r, on=['Prot1', 'Prot2'])
 
-        df_r = df_r.dropna(axis=0).reset_index(drop=True)
+        df_r = df_r.replace([np.inf, -np.inf], np.nan).dropna(axis=0).reset_index(drop=True)
 
         df_r = df_r[['Prot1', 'Prot2', 'Prot_pair', 'matching_nonNaN_count', 'r-value']]
 
