@@ -139,7 +139,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#7391f5',  # '#0cb2f0',
+            'ORG_COLOR': '#09E0D5',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
@@ -152,7 +152,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#7391f5',  # '#0cb2f0',
+            'ORG_COLOR': '#09E0D5',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
@@ -181,7 +181,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbaaee',
+            'ORG_COLOR': '#17C5E8',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'28': colors[0], '172': colors[1], '120': colors[2],
@@ -197,7 +197,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_13813',
             'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#a9dfbf',
+            'ORG_COLOR': '#80b1d3',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'1': colors[0], '23': colors[1], '17': colors[2],
@@ -237,7 +237,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12394A',
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbcc33',
+            'ORG_COLOR': '#E0DE09',
             'AofI': 'ANTIBIOTIC: Erythromycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'17': colors[0], '29': colors[1], '12': colors[2],
@@ -264,7 +264,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_19615',
             'QC_D_STRAIN': 'ATCC_12344',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbaaee',
+            'ORG_COLOR': '#17C5E8',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
@@ -277,7 +277,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_13813',
             'QC_D_STRAIN': 'ATCC_12386',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#a9dfbf',
+            'ORG_COLOR': '#80b1d3',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
@@ -290,7 +290,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_12394A',
             'QC_D_STRAIN': 'ATCC_12394D',
             'pipeline_slug': 'group-streptococcus',
-            'ORG_COLOR': '#bbcc33',
+            'ORG_COLOR': '#E0DE09',
             'AofI': '',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
             'Col_of_I_colors': {'Stre agalactiae': '#eedd88', 'Stre dysgalactiae': '#9cee98',
@@ -303,12 +303,12 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#bbaaee',
+            'ORG_COLOR': '#6FE19E',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella oxytoca': '#bbaaee',
+            'Col_of_I_colors': {'Klebsiella oxytoca': '#6FE19E',
                                 'Klebsiella michiganensis': '#ffb5c2',
-                                'Klebsiella grimontii': '#a9dfbf',
+                                'Klebsiella grimontii': '#bbaaee',
 
                                 # https://pmc.ncbi.nlm.nih.gov/articles/PMC8635272/
                                 # K. pasteurii represents the phylogroup Ko4. Strain SPARK_836_C1T, a representative
@@ -329,7 +329,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#fc7e97',
+            'ORG_COLOR': '#6FE19E',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC105771
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'199': colors[12], '176': colors[8], '223': colors[2],
@@ -343,7 +343,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700324',
             'QC_D_STRAIN': 'ATCC_51983',
             'pipeline_slug': 'klebsiella-oxytoca',
-            'ORG_COLOR': '#ee8866',
+            'ORG_COLOR': '#ffb5c2',
             'AofI': 'ANTIBIOTIC: Cefazolin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'27': colors[7], '11': colors[8], '29': colors[2],
@@ -371,10 +371,10 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#fc7e97',
+            'ORG_COLOR': '#EBA8F5',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella pneumoniae': '#fc7e97', # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#EBA8F5', # Colors assigned to Column of Interest
                                 'Klebsiella variicola subsp. variicola': '#bbcc33',
                                 'Klebsiella quasipneumoniae subsp. similipneumoniae': '#eedd88',
                                 'Klebsiella quasipneumoniae subsp. quasipneumoniae': '#77aadd',
@@ -387,7 +387,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_700603',
             'QC_D_STRAIN': 'ATCC_BAA1705',
             'pipeline_slug': 'klebsiella-pneumoniae',
-            'ORG_COLOR': '#a9dfbf',
+            'ORG_COLOR': '#EBA8F5',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'23': colors[7], '20': colors[8], '37': colors[2],
