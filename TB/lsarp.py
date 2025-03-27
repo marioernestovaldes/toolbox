@@ -139,7 +139,7 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#09E0D5',
+            'ORG_COLOR': '#3BCFC3',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
@@ -152,11 +152,11 @@ def get_org_info(organism):
             'QC_A_STRAIN': 'ATCC_35667',
             'QC_D_STRAIN': 'ATCC_700221',
             'pipeline_slug': 'enterococcus-faecium',
-            'ORG_COLOR': '#09E0D5',
+            'ORG_COLOR': '#3BCFC3',
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
-                                'B': colors[5], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                'B': '#8da0cb', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'FAES': {
             'ORG_SHORT_NAME': 'FAES',
