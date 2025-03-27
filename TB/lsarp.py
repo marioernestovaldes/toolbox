@@ -143,7 +143,7 @@ def get_org_info(organism):
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
-                                'B': colors[5], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                'B': '#8da0cb', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
         },
         'FAEM_MS3': {
             'ORG_SHORT_NAME': 'FAEM',
