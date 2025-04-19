@@ -435,7 +435,7 @@ def get_org_info(organism):
                                 'CC1': colors[6], '-': 'whitesmoke'
                                 # 'CC22': colors[7]
                                 },
-            'MSLT': {'arcC': 'arcC2', 'aroE': 'aroE', 'glpF': 'glpF', 'gmk': 'gmk',
+            'MLST': {'arcC': 'arcC2', 'aroE': 'aroE', 'glpF': 'glpF', 'gmk': 'gmk',
                      'pta': 'pta', 'tpi': 'tpiA', 'yqiL': 'group_4471'}
         }
     }
