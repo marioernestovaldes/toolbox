@@ -143,7 +143,9 @@ def get_org_info(organism):
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
-                                'B': '#8da0cb', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                'B': '#8da0cb', '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'adk': 'adk', 'atpA': 'atpA', 'ddl': 'ddl', 'gdh': 'zwf',
+                     'gyd': 'gap_1', 'pstS': 'pstS1_2', 'purK': 'purK'}
         },
         'FAEM_MS3': {
             'ORG_SHORT_NAME': 'FAEM',
@@ -156,7 +158,9 @@ def get_org_info(organism):
             'AofI': 'ANTIBIOTIC: Vancomycin',  # Antibiotic of Interest
             'Col_of_I': 'GENO: clades',  # Column of Interest
             'Col_of_I_colors': {'A1': colors[7], 'A2': colors[2],
-                                'B': '#8da0cb', '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                'B': '#8da0cb', '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'adk': 'adk', 'atpA': 'atpA', 'ddl': 'ddl', 'gdh': 'zwf',
+                     'gyd': 'gap_1', 'pstS': 'pstS1_2', 'purK': 'purK'}
         },
         'FAES': {
             'ORG_SHORT_NAME': 'FAES',
@@ -242,7 +246,9 @@ def get_org_info(organism):
             'Col_of_I': 'GENO: mlst',  # Column of Interest
             'Col_of_I_colors': {'17': colors[0], '29': colors[1], '12': colors[2],
                                 '15': colors[3], '8': colors[4], '282': colors[5],
-                                '63': colors[12], '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                '63': colors[12], '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'atoB': 'thlA', 'gki': 'glcK', 'gtr': 'glnQ_1', 'murI': 'murI',
+                     'mutS': 'mutS', 'recP': 'tkt', 'xpt': 'xpt'}
         },
         'Group_Strep': {
             'ORG_SHORT_NAME': 'GS',
@@ -320,7 +326,9 @@ def get_org_info(organism):
                                 # 70 % cutoff(23).The species status of K.pasteurii is therefore confirmed.
 
                                 # 'Klebsiella pasteurii': '#eedd88',
-                                '-': 'whitesmoke'}  # Colors assigned to Column of Interest
+                                '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'gapA': 'gapA', 'infB': 'infB', 'mdh': 'mdh_2', 'pgi': 'pgi',
+                     'phoE': 'phoE', 'rpoB': 'rpoB', 'tonB': 'tonB'}
         },
         'Koxy': {
             'ORG_SHORT_NAME': 'Koxy',
@@ -374,11 +382,13 @@ def get_org_info(organism):
             'ORG_COLOR': '#EBA8F5',
             'AofI': 'ANTIBIOTIC: Trimethoprim-sulfamethoxazole',  # Antibiotic of Interest
             'Col_of_I': 'GENO: species',  # Column of Interest
-            'Col_of_I_colors': {'Klebsiella pneumoniae': '#EBA8F5', # Colors assigned to Column of Interest
+            'Col_of_I_colors': {'Klebsiella pneumoniae': '#EBA8F5',
                                 'Klebsiella variicola subsp. variicola': '#bbcc33',
                                 'Klebsiella quasipneumoniae subsp. similipneumoniae': '#eedd88',
                                 'Klebsiella quasipneumoniae subsp. quasipneumoniae': '#77aadd',
-                                '-': 'whitesmoke'}
+                                '-': 'whitesmoke'},  # Colors assigned to Column of Interest
+            'MLST': {'gapA': 'gapA', 'infB': 'infB', 'mdh': 'mdh_1', 'pgi': 'pgi',
+                     'phoE': 'phoE', 'rpoB': 'rpoB', 'tonB': 'tonB'}
         },
         'Kpneu': {
             'ORG_SHORT_NAME': 'KPc',
