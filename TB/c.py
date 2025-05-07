@@ -67,6 +67,7 @@ plt.rcParams["figure.facecolor"] = "w"
 pd.options.display.max_colwidth = 100
 pd.options.display.max_columns = 100
 
+
 def display_df(df, rows=10, columns=10):
     """
     Display a Pandas DataFrame in a Jupyter Notebook with custom settings for the number of rows and columns shown.
@@ -88,27 +89,31 @@ def display_df(df, rows=10, columns=10):
 # Set Seaborn plotting context and style
 # sns.set_context("paper")
 
+
 from .color_and_style import set_sns_style, lighten_color
 set_sns_style()
 
 # Import custom functions for LSARP data
 from .lsarp import get_plate
 
+
 # Define a function to get the current date in a specific format
 def today():
     return date.today().strftime("%y%m%d")
+
 
 # Define utility functions for logarithmic transformations
 def log2p1(x):
     try:
         return np.log2(x + 1)
-    except:
+    except Exception:
         return x
+
 
 def log10p1(x):
     try:
         return np.log10(x + 1)
-    except:
+    except Exception:
         return x
 
 # Define a function to remove digits from a string

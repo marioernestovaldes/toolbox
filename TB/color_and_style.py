@@ -99,18 +99,98 @@ def get_color_palette(data: list, data_type='qualitative', hexa=True):
         return ListedColormap(colors)
 
 
-def set_sns_style(seaborn_style='science'):
+def set_sns_style(seaborn_style='nature'):
     """
     Set a customized Seaborn style with a scientific format.
 
     Parameters:
-    - seaborn_style (str): The style to be set. Options: 'science', 'vega-lite'. Default is 'science'.
+    - seaborn_style (str): The style to be set. Options: 'nature', 'science', 'vega-lite'. Default is 'nature'.
     """
     # Set the default Seaborn style
     # sns.set()
 
-    if seaborn_style == 'science':
-        # Define custom style parameters for a scientific format
+    sns.reset_defaults()
+
+    if seaborn_style == 'nature':
+        nature = {
+
+            # === FONT SETTINGS ===
+            'font.family': 'sans-serif',  # Use sans-serif fonts throughout
+            'font.sans-serif': 'Arial',  # Preferred sans-serif font
+            'mathtext.fontset': 'dejavusans',  # Match math font with sans-serif
+            'font.size': 8,  # Base font size
+            'axes.labelsize': 10,  # Axis label font size
+            'axes.labelpad': 7.5,  # Padding between axis and label
+            'xtick.labelsize': 8,  # X-axis tick label font size
+            'ytick.labelsize': 8,  # Y-axis tick label font size
+            'legend.fontsize': 8,  # Legend font size
+
+            # === FIGURE OUTPUT SETTINGS ===
+            'figure.figsize': (4, 4),  # Default figure size (in inches)
+            'figure.dpi': 600.0,  # High-resolution output
+            'savefig.bbox': 'tight',  # Trim whitespace when saving
+            'savefig.pad_inches': 0.05,  # Minimize padding around figure
+
+            # === AXES AND GRID STYLE ===
+            'axes.linewidth': 0.5,  # Thin axes borders
+            'grid.linewidth': 0.5,  # Grid line thickness
+
+            # === LINE AND MARKER STYLE ===
+            'lines.linewidth': 1.0,  # Default line width
+            'lines.markersize': 4,  # Marker size
+            'lines.markeredgewidth': 1.0,  # Marker border thickness
+
+            # === TICK STYLE ===
+            'xtick.direction': 'out',  # Outward ticks on x-axis
+            'ytick.direction': 'out',  # Outward ticks on y-axis
+            'xtick.major.size': 3,  # Length of major x-ticks
+            'ytick.major.size': 3,  # Length of major y-ticks
+            'xtick.major.width': 0.5,  # Width of major x-ticks
+            'ytick.major.width': 0.5,  # Width of major y-ticks
+            'xtick.labelcolor': 'black',  # X-tick label color
+            'ytick.labelcolor': 'black',  # Y-tick label color
+
+            # === BOXPLOT STYLE ===
+            'boxplot.boxprops.color': 'black',
+            'boxplot.boxprops.linestyle': '-',
+            'boxplot.boxprops.linewidth': 0.5,
+
+            'boxplot.capprops.color': 'black',
+            'boxplot.capprops.linestyle': '-',
+            'boxplot.capprops.linewidth': 0.5,
+
+            'boxplot.whiskerprops.color': 'black',
+            'boxplot.whiskerprops.linestyle': '-',
+            'boxplot.whiskerprops.linewidth': 0.5,
+            'boxplot.whiskers': 1.5,  # Whisker length (IQR multiplier)
+
+            'boxplot.medianprops.color': 'black',
+            'boxplot.medianprops.linestyle': '-',
+            'boxplot.medianprops.linewidth': 0.5,
+
+            'boxplot.flierprops.color': 'black',
+            'boxplot.flierprops.linestyle': 'none',
+            'boxplot.flierprops.linewidth': 0.5,
+            'boxplot.flierprops.marker': 'd',
+            'boxplot.flierprops.markeredgecolor': 'black',
+            'boxplot.flierprops.markeredgewidth': 0.5,
+            'boxplot.flierprops.markerfacecolor': 'black',
+            'boxplot.flierprops.markersize': 0.5,
+
+            'boxplot.meanline': False,
+            'boxplot.notch': False,
+            'boxplot.patchartist': False,
+            'boxplot.showbox': True,
+            'boxplot.showcaps': True,
+            'boxplot.showfliers': True,
+            'boxplot.showmeans': False,
+            'boxplot.vertical': True,
+        }
+
+        # Set the Seaborn theme to 'white' with the custom style parameters
+        sns.set_theme(context='paper', style='ticks', rc=nature)
+
+    elif seaborn_style == 'science':
         science = {
             # Set line widths
             'axes.linewidth': 0.5,
@@ -123,10 +203,11 @@ def set_sns_style(seaborn_style='science'):
             # Always save figures with a tight layout
             'savefig.bbox': 'tight',
             'savefig.pad_inches': 0.05,
+            'figure.figsize': (4, 4),
 
             # Use serif fonts for text and math symbols
             'font.family': 'sans-serif',  # change to 'serif' if we want Times New Roman font
-            'font.sans-serif': 'Arial',   # change to 'Times New Roman' if we want Times New Roman font
+            'font.sans-serif': 'Arial',  # change to 'Times New Roman' if we want Times New Roman font
             'mathtext.fontset': 'dejavuserif',
 
             # Customize the y-axis ticks
@@ -143,14 +224,14 @@ def set_sns_style(seaborn_style='science'):
             'xtick.major.width': 0.5,
             'xtick.minor.size': 1.5,
             'xtick.minor.width': 0.5,
-            'xtick.minor.visible': True
+            'xtick.minor.visible': True,
+
         }
 
         # Set the Seaborn theme to 'ticks' with the custom style parameters
         sns.set_theme(context='paper', style='ticks', rc=science)
 
     elif seaborn_style == 'vega_lite':
-        # Define custom style parameters for a vega-lite inspired format
         vegalite = {
             # Define font
             'font.family': 'sans-serif',
