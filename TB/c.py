@@ -91,7 +91,7 @@ def display_df(df, rows=10, columns=10):
 
 
 from .color_and_style import set_sns_style, lighten_color
-set_sns_style()
+set_sns_style(seaborn_style='nature')
 
 # Import custom functions for LSARP data
 from .lsarp import get_plate
