@@ -185,9 +185,12 @@ def set_sns_style(seaborn_style='nature'):
             'boxplot.showfliers': True,
             'boxplot.showmeans': False,
             'boxplot.vertical': True,
+
+            'xtick.minor.visible': False,
+            'ytick.minor.visible': False,
         }
 
-        # Set the Seaborn theme to 'white' with the custom style parameters
+        # Set the Seaborn theme to 'ticks' with the custom style parameters
         sns.set_theme(context='paper', style='ticks', rc=nature)
 
     elif seaborn_style == 'science':
