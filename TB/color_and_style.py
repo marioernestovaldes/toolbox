@@ -171,9 +171,9 @@ def set_sns_style(seaborn_style='nature'):
             'boxplot.flierprops.color': 'black',
             'boxplot.flierprops.linestyle': 'none',
             'boxplot.flierprops.linewidth': 0.5,
-            'boxplot.flierprops.marker': 'd',
-            'boxplot.flierprops.markeredgecolor': 'black',
-            'boxplot.flierprops.markeredgewidth': 0.5,
+            'boxplot.flierprops.marker': 'o',
+            'boxplot.flierprops.markeredgecolor': 'none',
+            'boxplot.flierprops.markeredgewidth': 0,
             'boxplot.flierprops.markerfacecolor': 'black',
             'boxplot.flierprops.markersize': 0.5,
 
